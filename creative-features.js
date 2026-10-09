@@ -336,12 +336,18 @@
   // ----------------------------------------------------------------------------
   // 6. AI TRAVEL ASSISTANT CHATBOT CONTROLLER
   // ----------------------------------------------------------------------------
-  window.toggleAIChat = function() {
+  window.toggleAIChat = function(force) {
     const modal = $('#aiChatModal');
     if (modal) {
-      modal.hidden = !modal.hidden;
-      if (!modal.hidden) {
+      const isCurrentlyHidden = modal.hidden || modal.hasAttribute('hidden');
+      const shouldOpen = (typeof force === 'boolean') ? force : isCurrentlyHidden;
+      if (shouldOpen) {
+        modal.removeAttribute('hidden');
+        modal.hidden = false;
         $('#aiChatInput')?.focus();
+      } else {
+        modal.setAttribute('hidden', '');
+        modal.hidden = true;
       }
     }
   };
