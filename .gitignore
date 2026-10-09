@@ -1,0 +1,9 @@
+node_modules/
+.env
+.DS_Store
+users.json
+bookings.json
+emergencies.json
+lost-found.json
+operations.json
+*.tmp

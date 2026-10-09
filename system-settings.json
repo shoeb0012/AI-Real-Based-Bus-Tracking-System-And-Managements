@@ -1,0 +1,31 @@
+{
+  "luggage": {
+    "freeAllowanceKg": 15,
+    "ratePerExtraKg": 30,
+    "maxAllowedKg": 50
+  },
+  "food": {
+    "onboardFoodEnabled": true,
+    "cancellationDeadlineMinutes": 45,
+    "refundPercentageBeforePrep": 100,
+    "refundPercentageAfterPrep": 0,
+    "taxRatePercent": 0
+  },
+  "alerts": {
+    "stage1Km": 10.0,
+    "stage2Km": 5.0,
+    "stage3Km": 2.0,
+    "stage4Km": 0.5,
+    "audioAlarmEnabled": true,
+    "ttsVoice": "hi-IN"
+  },
+  "kiosk": {
+    "inactivityTimeoutSeconds": 60,
+    "autoPrintTicket": true
+  },
+  "retention": {
+    "gpsRetentionDays": 30,
+    "auditLogRetentionDays": 365,
+    "autoBackupIntervalHours": 24
+  }
+}

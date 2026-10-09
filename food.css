@@ -1,0 +1,418 @@
+/* ==============================================================================
+   AI BUS TRACK — ONBOARD FOOD ORDERING & SEPARATE RECEIPT STYLESHEET
+   Supports Passenger Booking Flow, Food Menu, Kitchen Queue & Receipts
+   ============================================================================== */
+
+:root {
+  --food-primary: #a91d32;
+  --food-dark: #0f172a;
+  --food-slate: #1e293b;
+  --food-emerald: #10b981;
+  --food-amber: #f59e0b;
+  --food-rose: #ef4444;
+  --food-border: #e2e8f0;
+  --food-bg-light: #f8fafc;
+}
+
+/* 1. MANDATORY POLICY BANNER */
+.onboard-food-policy-banner {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  border-left: 5px solid #d97706;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #78350f;
+  font-size: 12.5px;
+  line-height: 1.55;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.08);
+}
+.onboard-food-policy-banner h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.policy-points-list {
+  margin: 6px 0 0 0;
+  padding-left: 18px;
+}
+.policy-points-list li {
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+/* 2. CHOOSE FOOD / SKIP FOOD BUTTONS */
+.food-flow-options {
+  display: flex;
+  gap: 12px;
+  margin: 14px 0;
+}
+.btn-food-choice {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+.btn-choice-skip {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.btn-choice-skip:hover, .btn-choice-skip.active {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+.btn-choice-order {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fda4af;
+}
+.btn-choice-order:hover, .btn-choice-order.active {
+  background: #a91d32;
+  color: #ffffff;
+  border-color: #a91d32;
+  box-shadow: 0 4px 12px rgba(169, 29, 50, 0.25);
+}
+
+/* 3. FOOD SELECTION DRAWER & CARDS */
+.food-selection-drawer {
+  background: #ffffff;
+  border: 1px solid var(--food-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.food-menu-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.food-card-compact {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.food-card-compact:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.food-card-compact.sold-out {
+  opacity: 0.6;
+  background: #f8fafc;
+}
+.food-img-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.food-info-col {
+  flex: 1;
+  min-width: 0;
+}
+.food-name-line {
+  font-weight: 700;
+  font-size: 13px;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.veg-icon {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #16a34a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.veg-icon::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #16a34a;
+  border-radius: 50%;
+}
+.food-price-line {
+  font-weight: 800;
+  font-size: 13px;
+  color: #a91d32;
+  margin: 2px 0;
+}
+.food-stock-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.badge-available { background: #ecfdf5; color: #047857; }
+.badge-soldout { background: #fef2f2; color: #b91c1c; font-weight: 800; }
+
+.food-qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-qty {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-qty:hover:not(:disabled) {
+  background: #a91d32;
+  color: #ffffff;
+  border-color: #a91d32;
+}
+.btn-qty:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.qty-display {
+  font-weight: 800;
+  font-size: 13px;
+  width: 18px;
+  text-align: center;
+}
+
+/* 4. SEPARATE CHECKOUT BILLING BREAKDOWN (Section 8 & 9) */
+.separated-checkout-summary {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  font-size: 13px;
+}
+.checkout-line-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  color: #475569;
+}
+.checkout-line-row.bold-row {
+  font-weight: 700;
+  color: #0f172a;
+}
+.checkout-line-row.total-row {
+  border-top: 2px dashed #cbd5e1;
+  margin-top: 8px;
+  padding-top: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.checkout-line-row.total-row .total-amount-val {
+  color: #a91d32;
+  font-size: 18px;
+}
+.optional-food-notice {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #92400e;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-remove-food-text {
+  background: transparent;
+  border: none;
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* 5. SEPARATE FOOD RECEIPT CARD (Section 10) */
+.food-receipt-card {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  font-family: inherit;
+  position: relative;
+}
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.receipt-tag {
+  background: #a91d32;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.receipt-order-id {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.receipt-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+.receipt-meta-grid small {
+  color: #64748b;
+  display: block;
+}
+.receipt-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 12px;
+}
+.receipt-items-table th {
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 6px 4px;
+  color: #64748b;
+  font-size: 11px;
+}
+.receipt-items-table td {
+  padding: 7px 4px;
+  border-bottom: 1px solid #f8fafc;
+}
+.receipt-total-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* 6. IN-BUS DELIVERY TRACKER PROGRESSION (Section 11) */
+.food-delivery-progression {
+  margin: 16px 0;
+  padding: 14px;
+  background: #0f172a;
+  border-radius: 10px;
+  color: #ffffff;
+}
+.delivery-steps-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-top: 10px;
+}
+.delivery-steps-track::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: #334155;
+  z-index: 1;
+}
+.delivery-step-node {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+.node-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 2px solid #64748b;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+.delivery-step-node.completed .node-circle {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+.delivery-step-node.active .node-circle {
+  background: #f59e0b;
+  border-color: #fbbf24;
+  color: #0f172a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
+  animation: pulseNode 1.5s infinite;
+}
+@keyframes pulseNode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .food-menu-items-grid {
+    grid-template-columns: 1fr;
+  }
+  .receipt-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .food-flow-options {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,53 @@
+[
+  {
+    "driverId": "drv-001",
+    "name": "Rajesh Kumar Yadav",
+    "contact": "+91 98112 34567",
+    "licenseNumber": "DL-0420180098765",
+    "licenseExpiry": "2031-08-15",
+    "verificationStatus": "VERIFIED",
+    "assignedBus": "UP32 AB 1234",
+    "dutyStatus": "ON_DUTY",
+    "trainingStatus": "AIS-052 Certified & Defensive Driving Level-2",
+    "rating": 4.9,
+    "totalTrips": 420,
+    "bloodGroup": "O+",
+    "createdAt": "2025-01-10T10:00:00.000Z",
+    "updatedAt": "2026-10-08T09:00:00.000Z",
+    "deletedAt": null
+  },
+  {
+    "driverId": "drv-002",
+    "name": "Vikram Singh Rathore",
+    "contact": "+91 94140 88219",
+    "licenseNumber": "RJ-1420150043210",
+    "licenseExpiry": "2029-11-20",
+    "verificationStatus": "VERIFIED",
+    "assignedBus": "RJ14 PC 4410",
+    "dutyStatus": "ON_DUTY",
+    "trainingStatus": "Advanced Highway Night Operations Certified",
+    "rating": 4.8,
+    "totalTrips": 380,
+    "bloodGroup": "B+",
+    "createdAt": "2025-02-14T11:00:00.000Z",
+    "updatedAt": "2026-10-08T09:00:00.000Z",
+    "deletedAt": null
+  },
+  {
+    "driverId": "drv-003",
+    "name": "Manpreet Singh",
+    "contact": "+91 98722 55431",
+    "licenseNumber": "PB-0820170011234",
+    "licenseExpiry": "2030-05-30",
+    "verificationStatus": "VERIFIED",
+    "assignedBus": "PB08 GH 5011",
+    "dutyStatus": "OFF_DUTY",
+    "trainingStatus": "Mountain Fog & Hills Specialized Driver",
+    "rating": 4.95,
+    "totalTrips": 510,
+    "bloodGroup": "A+",
+    "createdAt": "2025-03-01T08:00:00.000Z",
+    "updatedAt": "2026-10-07T18:00:00.000Z",
+    "deletedAt": null
+  }
+]

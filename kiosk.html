@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d16">
+  <title>Station Display Board & Kiosk — AI Bus Track</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="kiosk.css">
+  <link rel="stylesheet" href="food.css">
+</head>
+<body class="station-kiosk-body">
+
+  <!-- ====================================================================
+       1. TOP TERMINAL / STATION CONTROL HEADER
+       ==================================================================== -->
+  <header class="station-top-bar">
+    <div class="terminal-brand-group">
+      <a href="Tracker.html" class="terminal-logo-badge" title="Go to AI Bus Track Portal" style="text-decoration:none;">
+        <i class="fa-solid fa-bus-simple"></i>
+      </a>
+      <div class="terminal-title-text">
+        <h1>AI BUS TRACK <span style="font-size:12px; background:#a91d32; padding:2px 8px; border-radius:4px;">TERMINAL PIS</span></h1>
+        <small id="terminalSubTitle">DIGITAL PASSENGER DISPLAY & SELF-SERVICE KIOSK</small>
+      </div>
+    </div>
+
+    <!-- Active Station Switcher -->
+    <div class="station-selector-box">
+      <label for="stationSelect"><i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> TERMINAL:</label>
+      <select id="stationSelect" onchange="window.switchStationTerminal(this.value)">
+        <option value="delhi-01" selected>Delhi · Kashmere Gate ISBT (Terminal 1)</option>
+        <option value="lucknow-01">Lucknow · Alambagh Bus Terminal (Bay Hub)</option>
+        <option value="jaipur-01">Jaipur · Sindhi Camp Central Stand</option>
+        <option value="mumbai-01">Mumbai · Dadar Central Terminal</option>
+        <option value="bengaluru-01">Bengaluru · Kempegowda Majestic Station</option>
+        <option value="varanasi-01">Varanasi · Cantt Central Bus Stand</option>
+      </select>
+    </div>
+
+    <!-- Live Digital Clock & Weather -->
+    <div class="terminal-clock-weather">
+      <div>
+        <div class="digital-clock-led" id="stationLiveClock">--:--:--</div>
+        <div class="digital-date-sub" id="stationLiveDate">THURSDAY, 8 OCT 2026</div>
+      </div>
+    </div>
+
+    <!-- Terminal Action Buttons -->
+    <div class="terminal-action-buttons">
+      <button type="button" class="btn-kiosk-audio" id="btnAudioAnnouncement" onclick="window.triggerStationAnnouncement()">
+        <i class="fa-solid fa-volume-high"></i> <span>उद्घोषणा / Audio</span>
+      </button>
+
+      <!-- NO PHONE TOUCH KIOSK BUTTON -->
+      <button type="button" class="btn-kiosk-touch-booking" id="btnOpenTouchKiosk" onclick="window.openTouchKioskModal()">
+        <i class="fa-solid fa-ticket"></i>
+        <span>बिना फोन टिकट बुक करें (Kiosk)</span>
+      </button>
+
+      <a href="Tracker.html" class="btn-kiosk-audio" style="text-decoration:none;" title="Online Passenger Portal">
+        <i class="fa-solid fa-globe"></i> <span>Travel Portal</span>
+      </a>
+      <a href="admin.html" class="btn-kiosk-audio" style="text-decoration:none;" title="Fleet Control Desk">
+        <i class="fa-solid fa-gauge-high"></i> <span>Fleet Desk</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       2. SCROLLING NOTICE TICKER (15 KG LUGGAGE & 5 KM ALERT RULES)
+       ==================================================================== -->
+  <div class="station-ticker-bar" aria-live="polite">
+    <span class="ticker-tag"><i class="fa-solid fa-bullhorn"></i> STATION NOTICE</span>
+    <div class="ticker-content">
+      <span>🧳 <strong>LUGGAGE POLICY:</strong> सभी यात्रियों के लिए <strong>15 KG सामान पूर्णतः निःशुल्क (FREE)</strong> है। 15 KG से अधिक वजन पर ₹30/KG अतिरिक्त शुल्क देय है।</span>
+      <span style="margin: 0 20px;">•</span>
+      <span>🚨 <strong>5 KM PROXIMITY ALERT:</strong> यदि बस ओरिजिन स्टॉप से 5 किमी दूर है और यात्री स्टेशन नहीं पहुंचे हैं, तो तत्काल बोर्डिंग गेट पर पहुंचें अन्यथा बस छूट जाएगी!</span>
+      <span style="margin: 0 20px;">•</span>
+      <span>📱 <strong>PHONE-LESS BOOKING:</strong> यदि आपके पास फोन या स्मार्टफोन नहीं है, तो ऊपर 'बिना फोन टिकट बुक करें' बटन दबाकर सरकारी आईडी से तुरंत टिकट प्राप्त करें।</span>
+      <span style="margin: 0 20px;">•</span>
+      <span>🛡️ <strong>AIS-052 COMPLIANT:</strong> All active express coaches monitored by Satellite GPS & AI Driver Safety telemetry.</span>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       3. MAIN STATION DISPLAY & DEPARTURES BOARD
+       ==================================================================== -->
+  <main class="station-kiosk-container">
+
+    <!-- Station Live Operational Status Strip -->
+    <section class="station-status-strip">
+      <div class="status-stat-card">
+        <div class="status-stat-icon stat-icon-amber">
+          <i class="fa-solid fa-radar fa-spin" style="animation-duration: 4s;"></i>
+        </div>
+        <div class="status-stat-info">
+          <small>5 KM Approaching Alert</small>
+          <strong id="statCount5km">2 Buses Approaching</strong>
+        </div>
+      </div>
+
+      <div class="status-stat-card">
+        <div class="status-stat-icon stat-icon-emerald">
+          <i class="fa-solid fa-person-walking-luggage"></i>
+        </div>
+        <div class="status-stat-info">
+          <small>Now Boarding at Bays</small>
+          <strong id="statCountBoarding">3 Active Bays</strong>
+        </div>
+      </div>
+
+      <div class="status-stat-card">
+        <div class="status-stat-icon stat-icon-cyan">
+          <i class="fa-solid fa-suitcase-rolling"></i>
+        </div>
+        <div class="status-stat-info">
+          <small>Luggage Policy</small>
+          <strong style="color:#38bdf8;">15 KG Free / Pass</strong>
+        </div>
+      </div>
+
+      <div class="status-stat-card">
+        <div class="status-stat-icon stat-icon-purple">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="status-stat-info">
+          <small>Station Telemetry</small>
+          <strong style="color:#c084fc;">100% Online · AIS-052</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 KM Proximity Geofence Warning Box -->
+    <section class="geofence-station-alert" id="stationGeofenceAlert">
+      <div class="geofence-alert-left">
+        <div class="geofence-siren-box">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="geofence-alert-text">
+          <h3 id="geofenceAlertTitle">⚠️ 5 KM RADAR ALERT: Bus UP32 AB 1234 is 4.8 km from Kashmere Gate ISBT!</h3>
+          <p id="geofenceAlertDesc">यात्री अलर्ट: यदि आपने इस बस में सीट बुक की है और अभी तक स्टॉप पर नहीं पहुंचे हैं, तो <strong>जल्द से जल्द बोर्डिंग बे 04 पर पहुंचिए नहीं तो आपकी बस छूट जाएगी!</strong></p>
+        </div>
+      </div>
+      <div class="geofence-alert-right">
+        <div class="geofence-radar-pill">
+          <i class="fa-solid fa-satellite-dish"></i> <span id="geofenceDistanceText">4.8 KM · ETA 7 MINS</span>
+        </div>
+        <button type="button" class="btn-kiosk-audio" onclick="window.speakHindiAlert('यात्री ध्यान दें, बस 4.8 किलोमीटर दूर है, तुरंत प्लेटफार्म 4 पर पहुंचें!')">
+          <i class="fa-solid fa-bullhorn"></i> Alert Sound
+        </button>
+      </div>
+    </section>
+
+    <!-- Large Passenger Information Display (PIS) Table -->
+    <section class="pis-board-container">
+      <div class="pis-board-header">
+        <div class="pis-board-title">
+          <i class="fa-solid fa-display" style="color:#38bdf8; font-size:20px;"></i>
+          <div>
+            <h2 id="boardStationHeading">DELHI KASHMERE GATE ISBT — LIVE DEPARTURES & ARRIVALS</h2>
+            <small style="color:#94a3b8;">Real-Time Bus Arrival & Destination Reach Timetable (समय सारणी)</small>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:12px; color:#10b981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> LIVE SATELLITE FEED</span>
+          <button type="button" class="pis-action-btn" onclick="window.refreshStationBoard()">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="pis-table-scroll">
+        <table class="pis-board-table" id="stationPisTable">
+          <thead>
+            <tr>
+              <th>BUS NUMBER & OPERATOR</th>
+              <th>ROUTE & CORRIDOR</th>
+              <th>PLATFORM / BAY</th>
+              <th>IS STATION ARRIVAL (कब आएगी / टाइम)</th>
+              <th>DESTINATION ARRIVAL (कब पहुंचेगी / टाइम)</th>
+              <th>LIVE GPS TELEMETRY & 5 KM STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="stationPisTableBody">
+            <!-- Dynamically populated by kiosk.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Free 15 KG Luggage Policy Strip inside PIS -->
+      <div class="pis-luggage-policy-strip">
+        <div class="luggage-policy-notice">
+          <i class="fa-solid fa-suitcase-rolling" style="font-size:18px; color:#38bdf8;"></i>
+          <span><strong>LUGGAGE ALLOWANCE NOTICE:</strong> 15 KG luggage included FREE for all passengers. Over 15 KG: ₹30/KG extra surcharge automatically weighed at bay scale.</span>
+        </div>
+        <div>
+          <button type="button" class="btn-kiosk-touch-booking" style="padding:6px 14px; font-size:12px;" onclick="window.openTouchKioskModal()">
+            <i class="fa-solid fa-hand-pointer"></i> Touch to Book Ticket (No Phone Required)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station Amenities & Help strip -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:14px;">
+      <div style="background:var(--kiosk-card-bg); border:1px solid var(--kiosk-border); border-radius:10px; padding:14px; font-size:12px;">
+        <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;"><i class="fa-solid fa-circle-info"></i> Station Information Desk</div>
+        <div style="color:#94a3b8;">Helpdesk Counter 01 · 24/7 Ground Assistance & Senior Citizen Wheelchair Service.</div>
+      </div>
+      <div style="background:var(--kiosk-card-bg); border:1px solid var(--kiosk-border); border-radius:10px; padding:14px; font-size:12px;">
+        <div style="font-weight:800; color:#10b981; margin-bottom:4px;"><i class="fa-solid fa-money-bill-transfer"></i> Cash Payment Counters</div>
+        <div style="color:#94a3b8;">Counters 02 to 05 accept cash tokens issued by this touchscreen self-service kiosk.</div>
+      </div>
+      <div style="background:var(--kiosk-card-bg); border:1px solid var(--kiosk-border); border-radius:10px; padding:14px; font-size:12px;">
+        <div style="font-weight:800; color:#ef4444; margin-bottom:4px;"><i class="fa-solid fa-phone"></i> Emergency Station SOS</div>
+        <div style="color:#94a3b8;">Station Security: 1800-AI-BUS · Direct link with Highway Police Patrol (112).</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ====================================================================
+       4. SELF-SERVICE TOUCHSCREEN BOOKING KIOSK MODAL (PHONE-LESS MODE)
+       Allows passengers without smartphones/phones to input data and book!
+       ==================================================================== -->
+  <div class="kiosk-modal-backdrop" id="touchKioskModal" hidden>
+    <div class="kiosk-terminal-window">
+      <!-- Kiosk Header -->
+      <div class="kiosk-window-header">
+        <h2><i class="fa-solid fa-ticket"></i> SELF-SERVICE TICKETING KIOSK · स्वयं-सेवा काउंटर</h2>
+        <button type="button" class="kiosk-close-btn" onclick="window.closeTouchKioskModal()" aria-label="Close Kiosk">×</button>
+      </div>
+
+      <!-- Kiosk Progress Stepper (6 Steps) -->
+      <div class="kiosk-stepper-bar">
+        <div class="step-indicator active" id="stepIndicator1">
+          <span class="step-circle">1</span> <span>Route & Bus (बस)</span>
+        </div>
+        <div class="step-indicator" id="stepIndicator2">
+          <span class="step-circle">2</span> <span>Seat (सीट)</span>
+        </div>
+        <div class="step-indicator" id="stepIndicator3">
+          <span class="step-circle">3</span> <span>Govt ID (आईडी)</span>
+        </div>
+        <div class="step-indicator" id="stepIndicator4">
+          <span class="step-circle">4</span> <span>Food (भोजन)</span>
+        </div>
+        <div class="step-indicator" id="stepIndicator5">
+          <span class="step-circle">5</span> <span>Payment (भुगतान)</span>
+        </div>
+        <div class="step-indicator" id="stepIndicator6">
+          <span class="step-circle">6</span> <span>Pass & Slip (प्रिंट)</span>
+        </div>
+      </div>
+
+      <!-- Kiosk Body Wizard -->
+      <div class="kiosk-window-body" id="kioskWizardBody">
+
+        <!-- 60-SECOND PRIVACY INACTIVITY TIMER BANNER -->
+        <div id="kioskSessionTimerBar" style="background:rgba(234, 88, 12, 0.18); border:1px solid #ea580c; border-radius:8px; padding:8px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#fdba74;">
+          <span>⏱️ KIOSK PRIVACY TIMEOUT: <strong><span id="kioskTimerSec">60</span>s</strong> (निष्क्रियता पर व्यक्तिगत डेटा स्वतः रीसेट होगा)</span>
+          <button type="button" onclick="window.resetKioskInactivityTimer()" style="background:rgba(255,255,255,0.1); border:1px solid #fdba74; color:#fdba74; padding:3px 10px; border-radius:4px; font-size:11px; cursor:pointer;">सत्र जारी रखें (Stay Active)</button>
+        </div>
+
+        <!-- STEP 1: ROUTE & BUS SELECTION -->
+        <div class="wizard-step" id="wizardStep1">
+          <div class="phone-free-badge">
+            <i class="fa-solid fa-shield-check"></i>
+            <span><strong>नो-फोन मोड (No Phone Required):</strong> यदि आपके पास मोबाइल नहीं है, तो आप अपनी सरकारी आईडी (आधार, वोटर कार्ड आदि) दर्ज करके टिकट बुक कर सकते हैं।</span>
+          </div>
+
+          <div class="kiosk-touch-grid">
+            <div class="kiosk-touch-field">
+              <label>FROM (बोर्डिंग स्टेशन)</label>
+              <input type="text" id="kioskInputFrom" readonly value="Delhi (Kashmere Gate ISBT)">
+            </div>
+            <div class="kiosk-touch-field">
+              <label>TO (गंतव्य स्टेशन)</label>
+              <select id="kioskInputTo" onchange="window.loadKioskBusOptions()">
+                <option value="Lucknow">Lucknow (Alambagh Terminal)</option>
+                <option value="Jaipur" selected>Jaipur (Sindhi Camp)</option>
+                <option value="Agra">Agra (Idgah Bus Stand)</option>
+                <option value="Chandigarh">Chandigarh (ISBT 43)</option>
+                <option value="Dehradun">Dehradun (ISBT Hub)</option>
+                <option value="Varanasi">Varanasi (Cantt Stand)</option>
+                <option value="Haridwar">Haridwar (Central)</option>
+              </select>
+            </div>
+            <div class="kiosk-touch-field">
+              <label>DATE OF JOURNEY (यात्रा तिथि)</label>
+              <input type="date" id="kioskInputDate" onchange="window.loadKioskBusOptions()">
+            </div>
+          </div>
+
+          <h3 style="font-size:14px; color:#38bdf8; margin:16px 0 8px;">उपलब्ध बसें चुनें (Select Available Bus Service):</h3>
+          <div class="kiosk-bus-select-grid" id="kioskBusOptionsList">
+            <!-- Populated dynamically by kiosk.js -->
+          </div>
+        </div>
+
+        <!-- STEP 2: INTERACTIVE SEAT SELECTION -->
+        <div class="wizard-step" id="wizardStep2" style="display:none;">
+          <h3 style="font-size:15px; margin:0 0 6px; color:#fff;">टचस्क्रीन से अपनी सीट चुनें (Touch Seat Map)</h3>
+          <p style="font-size:12px; color:#94a3b8; margin:0 0 12px;">आप अधिकतम 4 सीटें चुन सकते हैं। हरे रंग की सीटें उपलब्ध हैं।</p>
+
+          <div class="kiosk-seat-layout">
+            <div class="bus-cabin-front">
+              <span><i class="fa-solid fa-steering-wheel"></i> DRIVER CABIN</span>
+              <span>ENTRY DOOR →</span>
+            </div>
+
+            <div class="kiosk-seat-rows" id="kioskSeatGrid">
+              <!-- Dynamically rendered seat buttons -->
+            </div>
+          </div>
+
+          <div style="background:#1e293b; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-size:12px; color:#94a3b8;">चयनित सीटें:</span>
+              <strong id="kioskSelectedSeatsText" style="color:#38bdf8; font-size:14px; margin-left:6px;">कोई नहीं</strong>
+            </div>
+            <div>
+              <span style="font-size:12px; color:#94a3b8;">सीट किराया:</span>
+              <strong id="kioskSeatsFareText" style="color:#10b981; font-size:16px; margin-left:6px;">₹0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: PASSENGER DETAILS WITHOUT PHONE (GOVT ID) -->
+        <div class="wizard-step" id="wizardStep3" style="display:none;">
+          <div class="phone-free-badge">
+            <i class="fa-solid fa-id-card"></i>
+            <span><strong>मोबाइल नंबर की कोई आवश्यकता नहीं है!</strong> यात्री की पहचान सरकारी आईडी से प्रमाणित होगी।</span>
+          </div>
+
+          <div class="kiosk-touch-grid">
+            <div class="kiosk-touch-field" style="grid-column: 1 / -1;">
+              <label>PASSENGER FULL NAME (यात्री का नाम) *</label>
+              <input type="text" id="kioskPassName" placeholder="Enter Full Name (e.g. Ramesh Kumar)" required>
+            </div>
+            <div class="kiosk-touch-field">
+              <label>AGE (उम्र) *</label>
+              <input type="number" id="kioskPassAge" placeholder="e.g. 35" min="1" max="110" value="28" required>
+            </div>
+            <div class="kiosk-touch-field">
+              <label>GENDER (लिंग) *</label>
+              <select id="kioskPassGender">
+                <option value="Male">Male (पुरुष)</option>
+                <option value="Female">Female (महिला)</option>
+                <option value="Other">Other (अन्य)</option>
+              </select>
+            </div>
+            <div class="kiosk-touch-field">
+              <label>GOVERNMENT PHOTO ID TYPE (पहचान पत्र प्रकार) *</label>
+              <select id="kioskGovIdType">
+                <option value="Aadhaar Card">Aadhaar Card (आधार कार्ड - 12 डिजिट)</option>
+                <option value="Voter ID">Voter ID Card (मतदाता पहचान पत्र)</option>
+                <option value="PAN Card">PAN Card (पैन कार्ड)</option>
+                <option value="Driving Licence">Driving Licence (ड्राइविंग लाइसेंस)</option>
+                <option value="Station Transit Token">Station Cash Token (स्टेशन यात्रा पर्ची)</option>
+              </select>
+            </div>
+            <div class="kiosk-touch-field">
+              <label>GOVT ID NUMBER (पहचान पत्र क्रमांक) *</label>
+              <input type="text" id="kioskGovIdNumber" placeholder="e.g. 5421-8902-3314 or EPIC No." required>
+            </div>
+          </div>
+
+          <div style="background:#172554; border:1px solid #1e3a8a; border-radius:8px; padding:12px; font-size:12px; color:#93c5fd;">
+            <i class="fa-solid fa-lock"></i> यह डेटा केवल बस कंडक्टर द्वारा टिकट सत्यापन के लिए उपयोग किया जाता है। फोन नंबर अनिवार्य नहीं है।
+          </div>
+        </div>
+
+        <!-- STEP 4: OPTIONAL ONBOARD FOOD (Section 2, 3, 16) -->
+        <div class="wizard-step" id="wizardStep4" style="display:none;">
+          <div class="onboard-food-policy-banner">
+            <h4>🍱 Onboard Food Available · ऑनबोर्ड भोजन सुविधा</h4>
+            <ul class="policy-points-list">
+              <li>Food is optional and is NOT included in your bus ticket.</li>
+              <li>Food and beverages will be charged separately.</li>
+              <li>Choose only if you want to order.</li>
+              <li>(भोजन पूर्णतः वैकल्पिक है, बस टिकट में शामिल नहीं है)</li>
+            </ul>
+          </div>
+
+          <div class="food-flow-options">
+            <button type="button" class="btn-food-choice btn-choice-skip active" id="btnKioskFoodSkip" onclick="window.setKioskFoodChoice(false)">
+              <i class="fa-solid fa-ban"></i> BOOK WITHOUT FOOD (बिना भोजन)
+            </button>
+            <button type="button" class="btn-food-choice btn-choice-order" id="btnKioskFoodOrder" onclick="window.setKioskFoodChoice(true)">
+              <i class="fa-solid fa-utensils"></i> ADD FOOD (भोजन जोड़ें)
+            </button>
+          </div>
+
+          <div class="food-selection-drawer" id="kioskFoodDrawer" style="display:none; background:#1e293b; border-color:#334155;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <strong style="color:#fff; font-size:13px;">स्वादिष्ट अल्पाहार व पेय चुनें (Delivered to Seat)</strong>
+              <small style="color:#94a3b8;">अलग से शुल्क देय</small>
+            </div>
+            <div class="food-menu-items-grid" id="kioskFoodItemsGrid">
+              <!-- Populated by kiosk.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: LUGGAGE CALCULATOR & STATION PAYMENT (Section 8, 9, 20) -->
+        <div class="wizard-step" id="wizardStep5" style="display:none;">
+          <!-- 15 KG Luggage Rule Box -->
+          <div class="kiosk-luggage-box">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h4 style="margin:0; font-size:14px; color:#fff;">LUGGAGE CHECK (लगेज वजन जांच)</h4>
+                <small style="color:#94a3b8;">प्रत्येक यात्री के लिए <strong>15 KG सामान पूर्णतः मुफ़्त</strong> है।</small>
+              </div>
+              <span style="background:#10b981; color:#fff; font-size:11px; font-weight:800; padding:4px 8px; border-radius:4px;">15 KG FREE ALLOWANCE</span>
+            </div>
+
+            <div class="luggage-control-row">
+              <button type="button" class="btn-weight-adjust" onclick="window.adjustKioskLuggage(-5)">−</button>
+              <div class="weight-kiosk-display" id="kioskLuggageDisplay">15 <small style="font-size:14px; color:#94a3b8;">KG</small></div>
+              <button type="button" class="btn-weight-adjust" onclick="window.adjustKioskLuggage(5)">+</button>
+            </div>
+
+            <div id="kioskLuggageStatusNotice" style="text-align:center; font-size:12px; color:#10b981; font-weight:700;">
+              ✓ 15 KG सीमा के अंदर है — कोई अतिरिक्त शुल्क नहीं (₹0 Extra)
+            </div>
+          </div>
+
+          <!-- Total Fare Breakdown with Separated Transparent Billing (Section 8) -->
+          <div style="background:#111827; border:1px solid #334155; border-radius:10px; padding:14px; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+              <span>सीट किराया (Bus Ticket):</span> <strong id="kioskBillSeatFare">₹0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+              <span>अतिरिक्त लगेज शुल्क (Luggage):</span> <strong id="kioskBillLuggageFee" style="color:#10b981;">₹0 (Free)</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+              <span>वैकल्पिक भोजन शुल्क (Optional Food):</span> <strong id="kioskBillFoodFee" style="color:#64748b;">₹0 (Skipped)</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:800; border-top:1px dashed #475569; padding-top:8px; margin-top:8px;">
+              <span>कुल देय राशि (Total Amount):</span> <strong id="kioskBillTotal" style="color:#facc15;">₹0</strong>
+            </div>
+          </div>
+
+          <!-- Payment Options -->
+          <h4 style="margin:0 0 8px; font-size:14px; color:#38bdf8;">भुगतान माध्यम चुनें (Select Payment Mode):</h4>
+          <div class="payment-tiles-row">
+            <!-- Mode 1: Cash Counter Slip -->
+            <div class="pay-tile-card selected" id="payModeCash" onclick="window.selectKioskPayMode('cash')">
+              <div class="pay-tile-icon" style="color:#10b981;"><i class="fa-solid fa-money-bill-1-wave"></i></div>
+              <div class="pay-tile-title">Station Cash Counter</div>
+              <div class="pay-tile-desc">पर्ची लेकर काउंटर 01-05 पर नकद दें</div>
+            </div>
+
+            <!-- Mode 2: Transit RFID Card -->
+            <div class="pay-tile-card" id="payModeSmartCard" onclick="window.selectKioskPayMode('smartcard')">
+              <div class="pay-tile-icon" style="color:#38bdf8;"><i class="fa-solid fa-id-badge"></i></div>
+              <div class="pay-tile-title">Metro / Transit Card</div>
+              <div class="pay-tile-desc">कियोस्क सेंसर पर कार्ड टैप करें</div>
+            </div>
+
+            <!-- Mode 3: Screen UPI QR -->
+            <div class="pay-tile-card" id="payModeUPI" onclick="window.selectKioskPayMode('upi')">
+              <div class="pay-tile-icon" style="color:#f59e0b;"><i class="fa-solid fa-qrcode"></i></div>
+              <div class="pay-tile-title">Kiosk Screen UPI / Card</div>
+              <div class="pay-tile-desc">स्क्रीन पर क्यूआर स्कैन या कार्ड स्वाइप</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: THERMAL BOARDING PASS PRINTING & SEPARATE FOOD RECEIPT (Section 10, 16) -->
+        <div class="wizard-step" id="wizardStep6" style="display:none;">
+          <div style="text-align:center; margin-bottom:16px;">
+            <div style="display:inline-block; background:#10b981; color:#fff; width:48px; height:48px; border-radius:50%; line-height:48px; font-size:24px;">✓</div>
+            <h3 style="margin:8px 0 2px; font-size:18px; color:#fff;">टिकट सफलतापूर्वक जारी हुआ! (Ticket Issued)</h3>
+            <p style="font-size:12px; color:#94a3b8; margin:0;">नीचे आपका स्टेशन बोर्डिंग पास और रसीद है। इसे प्रिंट करें या काउंटर पर दिखाएं।</p>
+          </div>
+
+          <!-- Printable Thermal Paper Boarding Pass -->
+          <div class="thermal-ticket-card" id="thermalPrintCard">
+            <div style="text-align:center; border-bottom:1px solid #cbd5e1; padding-bottom:8px; margin-bottom:10px;">
+              <strong style="font-size:16px; color:#a91d32; letter-spacing:1px;">AI BUS TRACK · STATION KIOSK</strong>
+              <div style="font-size:10px; color:#64748b;" id="ticketTerminalName">DELHI KASHMERE GATE ISBT — PLATFORM BOARDING PASS</div>
+            </div>
+
+            <div class="ticket-pnr-head">
+              <div>
+                <small style="color:#64748b; font-weight:700;">PNR NUMBER</small>
+                <div class="ticket-pnr-val" id="ticketPnrVal">KSK-DEL-89421</div>
+              </div>
+              <div style="text-align:right;">
+                <span class="pis-bay-badge" id="ticketBayBadge">BAY 04</span>
+              </div>
+            </div>
+
+            <div class="ticket-field-row">
+              <div>
+                <small>PASSENGER NAME</small>
+                <b id="ticketPassName">Ramesh Kumar</b>
+              </div>
+              <div>
+                <small>GOVT ID PROOF</small>
+                <b id="ticketGovId">Aadhaar: XXXX-3314</b>
+              </div>
+              <div>
+                <small>BUS NUMBER & TYPE</small>
+                <b id="ticketBusInfo">UP32 AB 1234 (Volvo AC)</b>
+              </div>
+              <div>
+                <small>SEAT NUMBER(S)</small>
+                <b id="ticketSeatInfo" style="color:#a91d32;">Seat 14A (Window)</b>
+              </div>
+              <div>
+                <small>STATION ARRIVAL (कब आएगी)</small>
+                <b id="ticketStationArrival">08:35 PM</b>
+              </div>
+              <div>
+                <small>DESTINATION REACH (कब पहुंचेगी)</small>
+                <b id="ticketDestArrival">05:30 AM (Next Day)</b>
+              </div>
+              <div>
+                <small>LUGGAGE ALLOWANCE</small>
+                <b id="ticketLuggageAllowance" style="color:#10b981;">15 KG Free Allowance (Checked)</b>
+              </div>
+              <div>
+                <small>PAYMENT MODE / STATUS</small>
+                <b id="ticketPayStatus">Cash Slip (Counter 03) · Paid</b>
+              </div>
+            </div>
+
+            <!-- SVG QR Code & Barcode -->
+            <div class="ticket-barcode-box">
+              <svg viewBox="0 0 100 100" width="80" height="80" aria-label="Ticket QR">
+                <rect width="100" height="100" fill="#ffffff"/>
+                <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M20,20 h10 v10 h-10 z" fill="#0f172a"/>
+                <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M70,20 h10 v10 h-10 z" fill="#0f172a"/>
+                <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M20,70 h10 v10 h-10 z" fill="#0f172a"/>
+                <rect x="45" y="15" width="8" height="20" fill="#0f172a"/>
+                <rect x="45" y="45" width="10" height="10" fill="#a91d32"/>
+                <rect x="60" y="55" width="25" height="8" fill="#0f172a"/>
+                <rect x="70" y="70" width="15" height="15" fill="#0f172a"/>
+              </svg>
+              <div style="font-family:monospace; font-size:11px; margin-top:4px; letter-spacing:2px; font-weight:800;">* KSK-AIBUS-2026-ONLINE *</div>
+            </div>
+
+            <div style="text-align:center; font-size:10px; color:#64748b;">
+              ★ Show this boarding pass to conductor at boarding gate. Happy Journey! ★
+            </div>
+          </div>
+
+          <!-- SEPARATE THERMAL FOOD RECEIPT (If Food Ordered) -->
+          <div id="thermalFoodReceiptContainer" style="display:none; margin-top:14px;"></div>
+
+          <div style="display:flex; justify-content:center; gap:14px; margin-top:20px;">
+            <button type="button" class="btn-kiosk-touch-booking" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> <span>प्रिंट टिकट व रसीद (Print Boarding Pass)</span>
+            </button>
+            <button type="button" class="btn-kiosk-audio" onclick="window.resetKioskBooking()">
+              <i class="fa-solid fa-plus"></i> <span>Book Another Ticket</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Kiosk Footer Navigation Controls -->
+      <div class="kiosk-window-footer" id="kioskWizardFooter">
+        <button type="button" class="btn-kiosk-nav btn-kiosk-prev" id="btnKioskPrev" onclick="window.kioskPrevStep()" style="display:none;">
+          ← पिछला (Back)
+        </button>
+        <span id="kioskCurrentStepNotice" style="font-size:12px; color:#94a3b8;">चरण 1 / 4: बस और समय चुनें</span>
+        <button type="button" class="btn-kiosk-nav btn-kiosk-next" id="btnKioskNext" onclick="window.kioskNextStep()">
+          आगे बढ़ें (Next Step) →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="kiosk.js"></script>
+</body>
+</html>

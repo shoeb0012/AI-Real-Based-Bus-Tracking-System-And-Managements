@@ -1,0 +1,66 @@
+[
+  {
+    "stationId": "delhi-isbt-01",
+    "name": "Delhi Kashmere Gate ISBT",
+    "city": "Delhi",
+    "code": "DEL-KG",
+    "coordinates": { "lat": 28.6675, "lng": 77.2285 },
+    "platforms": [
+      { "platformNumber": "BAY 01", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "BAY 02", "status": "OCCUPIED", "activeBus": "RJ14 PC 4410" },
+      { "platformNumber": "BAY 03", "status": "APPROACHING", "activeBus": "UP32 AB 1234" },
+      { "platformNumber": "BAY 04", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "BAY 05", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "BAY 06", "status": "BOARDING", "activeBus": "UP80 BR 9081" }
+    ],
+    "amenities": ["Waiting Lounge", "AC Restroom", "Cloak Room", "Digital PIS Displays", "Food Court"],
+    "manager": "R. K. Sharma (Station Superintendent)",
+    "deletedAt": null
+  },
+  {
+    "stationId": "lucknow-alambagh-01",
+    "name": "Lucknow Alambagh Central Bus Terminal",
+    "city": "Lucknow",
+    "code": "LKO-AB",
+    "coordinates": { "lat": 26.8189, "lng": 80.9022 },
+    "platforms": [
+      { "platformNumber": "Platform 1", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "Platform 2", "status": "BOARDING", "activeBus": "UP32 LN 8840" },
+      { "platformNumber": "Platform 3", "status": "APPROACHING", "activeBus": "UP32 AB 1234" },
+      { "platformNumber": "Platform 4", "status": "AVAILABLE", "activeBus": null }
+    ],
+    "amenities": ["Metro Interchange", "Luggage Weighing Scale", "Charging Stations", "Digital Kiosks"],
+    "manager": "A. Verma (Assistant Regional Manager)",
+    "deletedAt": null
+  },
+  {
+    "stationId": "kanpur-jhakarkati-01",
+    "name": "Kanpur Jhakarkati Bus Terminal",
+    "city": "Kanpur",
+    "code": "KNP-JK",
+    "coordinates": { "lat": 26.4528, "lng": 80.3478 },
+    "platforms": [
+      { "platformNumber": "Platform 1", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "Platform 2", "status": "AVAILABLE", "activeBus": null },
+      { "platformNumber": "Platform 3", "status": "ARRIVED", "activeBus": "UP78 CN 5521" }
+    ],
+    "amenities": ["Ticket Kiosks", "Water ATMs", "Police Help Post"],
+    "manager": "S. Dixit (Station Manager)",
+    "deletedAt": null
+  },
+  {
+    "stationId": "jaipur-sindhicamp-01",
+    "name": "Jaipur Sindhi Camp Central Terminal",
+    "city": "Jaipur",
+    "code": "JPR-SC",
+    "coordinates": { "lat": 26.9239, "lng": 75.8016 },
+    "platforms": [
+      { "platformNumber": "Platform 1", "status": "DEPARTED", "activeBus": "RJ14 VB 2011" },
+      { "platformNumber": "Platform 2", "status": "OCCUPIED", "activeBus": "RJ14 PC 4410" },
+      { "platformNumber": "Platform 3", "status": "AVAILABLE", "activeBus": null }
+    ],
+    "amenities": ["Tourist Assistance Desk", "24x7 Medical Room", "Prepaid Taxi Booth"],
+    "manager": "M. Singh (RSRTC Controller)",
+    "deletedAt": null
+  }
+]

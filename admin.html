@@ -1,0 +1,1368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <title>AI Bus Track — Enterprise Admin Portal</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  
+  <!-- Leaflet CSS for Live Tracking -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="Tracker.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    
+    <!-- ====================================================================
+         1. ADMIN SIDEBAR (17 MODULES)
+         ==================================================================== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <a class="sidebar-brand" href="#dashboard" onclick="switchTab('dashboard')">
+          <div class="brand-icon">
+            <i class="fa-solid fa-bus text-white"></i>
+          </div>
+          <div>
+            <div class="brand-title">AI <span>Bus</span> Track</div>
+            <span class="brand-subtitle">ADMIN CONSOLE</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-title">Core Operations</span>
+        <button class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="tracking" onclick="switchTab('tracking')">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Live Tracking</span>
+          <span class="nav-badge" id="sidebarLiveCount">4</span>
+        </button>
+        <button class="nav-item" data-tab="buses" onclick="switchTab('buses')">
+          <i class="fa-solid fa-van-shuttle"></i>
+          <span>Buses (Fleet)</span>
+        </button>
+        <button class="nav-item" data-tab="drivers" onclick="switchTab('drivers')">
+          <i class="fa-solid fa-id-card"></i>
+          <span>Drivers</span>
+        </button>
+        <button class="nav-item" data-tab="routes" onclick="switchTab('routes')">
+          <i class="fa-solid fa-route"></i>
+          <span>Routes & Stops</span>
+        </button>
+        <button class="nav-item" data-tab="trips" onclick="switchTab('trips')">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Trip Records</span>
+        </button>
+        <button class="nav-item" data-tab="luggage" onclick="switchTab('luggage')">
+          <i class="fa-solid fa-suitcase-rolling"></i>
+          <span>Luggage Policy</span>
+        </button>
+
+        <span class="nav-section-title">AI & Intelligence</span>
+        <button class="nav-item" data-tab="ai-insights" onclick="switchTab('ai-insights')">
+          <i class="fa-solid fa-brain text-purple-400"></i>
+          <span>AI Insights</span>
+        </button>
+        <button class="nav-item" data-tab="safety" onclick="switchTab('safety')">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Safety & SOS</span>
+          <span class="nav-badge danger" id="sidebarAlertCount">3</span>
+        </button>
+        <button class="nav-item" data-tab="driver-safety" onclick="switchTab('driver-safety')">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Driver Safety Scores</span>
+        </button>
+
+        <span class="nav-section-title">Fleet Maintenance</span>
+        <button class="nav-item" data-tab="maintenance" onclick="switchTab('maintenance')">
+          <i class="fa-solid fa-wrench"></i>
+          <span>Maintenance</span>
+        </button>
+        <button class="nav-item" data-tab="documents" onclick="switchTab('documents')">
+          <i class="fa-solid fa-file-shield"></i>
+          <span>Document Expiry</span>
+          <span class="nav-badge" style="background:var(--warning); color:#fff">4</span>
+        </button>
+
+        <span class="nav-section-title">Reports & System</span>
+        <button class="nav-item" data-tab="notifications" onclick="switchTab('notifications')">
+          <i class="fa-solid fa-bell"></i>
+          <span>Notification Center</span>
+        </button>
+        <button class="nav-item" data-tab="analytics" onclick="switchTab('analytics')">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Analytics & Reports</span>
+        </button>
+        <button class="nav-item" data-tab="reports" onclick="switchTab('reports')">
+          <i class="fa-solid fa-file-export"></i>
+          <span>Export Reports</span>
+        </button>
+        <button class="nav-item" data-tab="roles" onclick="switchTab('roles')">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Users & RBAC</span>
+        </button>
+        <button class="nav-item" data-tab="audit" onclick="switchTab('audit')">
+          <i class="fa-solid fa-fingerprint"></i>
+          <span>Audit Logs</span>
+        </button>
+        <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
+          <i class="fa-solid fa-gear"></i>
+          <span>Admin Profile</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <img class="user-avatar" id="sidebarUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+          <div class="user-details">
+            <div class="user-name" id="sidebarUserName">Gyananand</div>
+            <div class="user-role-tag" id="sidebarUserRole">SUPER ADMIN</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()" title="Logout" style="padding:6px 9px;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         2. MAIN CONTENT CONTAINER
+         ==================================================================== -->
+    <main class="admin-main">
+      
+      <!-- TOP NAVIGATION BAR -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="btn btn-secondary btn-sm" id="sidebarToggleBtn" onclick="toggleSidebar()" style="display:none;">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <h1 class="topbar-title" id="pageTitleHeading">Admin Dashboard</h1>
+          <div class="live-clock">
+            <span class="live-dot"></span>
+            <span id="topbarClock">--:--:-- IST</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Role Switcher for Hackathon Evaluation -->
+          <div class="role-switcher" title="Select role to evaluate RBAC restrictions">
+            <label><i class="fa-solid fa-user-gear"></i> RBAC Role:</label>
+            <select class="role-select" id="roleSelector" onchange="handleRoleSwitch(this.value)">
+              <option value="super_admin">Super Admin (Full Access)</option>
+              <option value="transport_admin">Transport Admin (Fleet & Routes)</option>
+              <option value="fleet_manager">Fleet Manager (Maintenance & Specs)</option>
+              <option value="dispatcher">Dispatcher (Trip Dispatch)</option>
+              <option value="driver">Driver (Trip execution)</option>
+              <option value="security_officer">Security Officer (SOS & Verification)</option>
+              <option value="viewer">Viewer / Parent (Read Only)</option>
+            </select>
+          </div>
+
+          <!-- Live GPS Simulation Ticker -->
+          <button class="btn-sim" id="simulationToggleBtn" onclick="toggleLiveSimulation()">
+            <i class="fa-solid fa-play"></i>
+            <span id="simBtnText">Start GPS Simulation</span>
+          </button>
+
+          <!-- Emergency SOS Trigger Button -->
+          <button class="btn-sos" onclick="openSOSModal()">
+            <i class="fa-solid fa-bell"></i>
+            <span>SOS EMERGENCY</span>
+          </button>
+
+          <!-- Public Portal (360 & Moving Highway Bus) -->
+          <a href="Tracker.html" class="btn btn-secondary btn-sm" title="Open Public Portal with Moving Bus & 360 View" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:#f8fafc; font-size:12px; font-weight:700;">
+            <i class="fa-solid fa-compass"></i>
+            <span>Public Portal</span>
+          </a>
+
+          <!-- Notifications Bell -->
+          <button class="btn-icon-topbar" onclick="switchTab('notifications')" title="Notifications">
+            <i class="fa-regular fa-bell"></i>
+            <span class="badge-counter" id="unreadNotifCount">4</span>
+          </button>
+
+          <!-- Profile / Settings Link -->
+          <button class="btn-icon-topbar" onclick="switchTab('profile')" title="Admin Profile">
+            <i class="fa-regular fa-user"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+
+        <!-- ABNORMAL ROUTE DEVIATION DETECTED BANNER -->
+        <div class="alert-banner" id="deviationBanner">
+          <div class="alert-banner-content">
+            <i class="fa-solid fa-triangle-exclamation alert-icon"></i>
+            <div>
+              <div class="alert-title">⚠ ABNORMAL ROUTE DEVIATION DETECTED</div>
+              <div class="alert-desc">Bus <strong>UP65 AB 1024</strong> (St. Johns School West Corridor) is <strong>1.8 km off-route</strong> from designated corridor. Risk: <strong>HIGH</strong>.</div>
+            </div>
+          </div>
+          <div class="alert-actions">
+            <button class="btn btn-danger btn-sm" onclick="callDriverSim('Amit Yadav', '+91 98765 11004')">
+              <i class="fa-solid fa-phone"></i> Contact Driver
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="dispatchSecuritySim('UP65 AB 1024')">
+              <i class="fa-solid fa-shield-halved"></i> Alert Security
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="switchTab('tracking'); focusBusOnMap('bus-004');">
+              <i class="fa-solid fa-location-crosshairs"></i> View Location
+            </button>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 1: DASHBOARD
+             ================================================================ -->
+        <div class="tab-pane active" id="pane-dashboard">
+          
+          <!-- TOP 10 STATISTICS CARDS -->
+          <div class="stats-grid">
+            <div class="stat-card accent-red">
+              <div class="stat-header">
+                <span class="stat-label">Total Buses</span>
+                <i class="fa-solid fa-bus stat-icon"></i>
+              </div>
+              <div class="stat-number" id="statTotalBuses">48</div>
+              <div class="stat-subtext">School, College & Transit</div>
+            </div>
+
+            <div class="stat-card accent-green">
+              <div class="stat-header">
+                <span class="stat-label">Active Buses</span>
+                <i class="fa-solid fa-circle-check stat-icon text-green-500"></i>
+              </div>
+              <div class="stat-number text-green-600" id="statActiveBuses">35</div>
+              <div class="stat-subtext"><span class="stat-trend positive">73%</span> fleet operational</div>
+            </div>
+
+            <div class="stat-card accent-blue">
+              <div class="stat-header">
+                <span class="stat-label">On Route</span>
+                <i class="fa-solid fa-route stat-icon text-blue-500"></i>
+              </div>
+              <div class="stat-number text-blue-600" id="statOnRoute">21</div>
+              <div class="stat-subtext">Live telematics streaming</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Inactive / Depot</span>
+                <i class="fa-solid fa-warehouse stat-icon"></i>
+              </div>
+              <div class="stat-number" id="statInactiveBuses">13</div>
+              <div class="stat-subtext">Depot standby & spare</div>
+            </div>
+
+            <div class="stat-card accent-blue">
+              <div class="stat-header">
+                <span class="stat-label">Total Drivers</span>
+                <i class="fa-solid fa-id-card-clip stat-icon"></i>
+              </div>
+              <div class="stat-number" id="statTotalDrivers">52</div>
+              <div class="stat-subtext">Commercial licence vetted</div>
+            </div>
+
+            <div class="stat-card accent-green">
+              <div class="stat-header">
+                <span class="stat-label">Verified Drivers</span>
+                <i class="fa-solid fa-user-check stat-icon text-green-500"></i>
+              </div>
+              <div class="stat-number text-green-600" id="statVerifiedDrivers">46</div>
+              <div class="stat-subtext">Police & medical approved</div>
+            </div>
+
+            <div class="stat-card accent-amber">
+              <div class="stat-header">
+                <span class="stat-label">Pending Verification</span>
+                <i class="fa-solid fa-user-clock stat-icon text-amber-500"></i>
+              </div>
+              <div class="stat-number text-amber-600" id="statPendingDrivers">6</div>
+              <div class="stat-subtext">Background checks ongoing</div>
+            </div>
+
+            <div class="stat-card accent-blue">
+              <div class="stat-header">
+                <span class="stat-label">Active Trips</span>
+                <i class="fa-solid fa-compass stat-icon"></i>
+              </div>
+              <div class="stat-number" id="statActiveTrips">18</div>
+              <div class="stat-subtext">Morning transit window</div>
+            </div>
+
+            <div class="stat-card accent-danger">
+              <div class="stat-header">
+                <span class="stat-label">Emergency Alerts</span>
+                <i class="fa-solid fa-radiation stat-icon text-red-500"></i>
+              </div>
+              <div class="stat-number text-red-600" id="statEmergencyAlerts">3</div>
+              <div class="stat-subtext"><span class="stat-trend negative">Requires attention</span></div>
+            </div>
+
+            <div class="stat-card accent-amber">
+              <div class="stat-header">
+                <span class="stat-label">Maintenance Due</span>
+                <i class="fa-solid fa-wrench stat-icon text-amber-500"></i>
+              </div>
+              <div class="stat-number text-amber-600" id="statMaintenanceDue">5</div>
+              <div class="stat-subtext">Brake & engine inspections</div>
+            </div>
+          </div>
+
+          <!-- DASHBOARD WIDGETS: MAP OVERVIEW & RECENT EMERGENCIES -->
+          <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px; margin-bottom:24px;">
+            <div class="panel-card" style="margin-bottom:0;">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Live Fleet Telemetry (Varanasi Network)</h2>
+                  <p>Real-time GPS vehicle positions, speeds and corridor tracking.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('tracking')">
+                  <i class="fa-solid fa-expand"></i> Full Screen Map
+                </button>
+              </div>
+              <div class="panel-body" style="padding:0;">
+                <div style="height:380px;" id="dashboardMiniMap"></div>
+              </div>
+            </div>
+
+            <div class="panel-card" style="margin-bottom:0;">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Active Safety Incidents</h2>
+                  <p>Real-time SOS and route deviation alerts.</p>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="switchTab('safety')">View All</button>
+              </div>
+              <div class="panel-body" style="padding:14px;" id="dashboardSOSList">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- AI INSIGHTS HIGHLIGHT BANNER -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>AI Delay Predictor & Route Optimizer Insights</h2>
+                <p>Automated machine learning risk assessments across school & college transit corridors.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="switchTab('ai-insights')">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Open AI Control Room
+              </button>
+            </div>
+            <div class="panel-body">
+              <div class="ai-comparison-grid">
+                <div class="comparison-box">
+                  <div class="comparison-header">
+                    <i class="fa-solid fa-clock text-amber-500"></i> AI DELAY PREDICTION: UP65 AB 1021
+                  </div>
+                  <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">DPS Varanasi Campus Express (School)</div>
+                  <div class="comparison-stat text-red-600">Predicted Delay: +12 Mins</div>
+                  <div style="margin-top:10px; font-size:13px; line-height:1.6;">
+                    <strong>Root Cause:</strong> Heavy bottleneck congestion on Cantonment Ring Road junction.<br>
+                    <strong>Probability:</strong> <span class="badge" style="background:#fee2e2; color:#991b1b;">HIGH (88%)</span><br>
+                    <strong>Suggested Action:</strong> Notify parents & dispatcher; apply bypass corridor.
+                  </div>
+                  <button class="btn btn-secondary btn-sm" style="margin-top:14px;" onclick="triggerParentDelayNotice('UP65 AB 1021')">
+                    <i class="fa-regular fa-paper-plane"></i> Dispatch Delay Notification
+                  </button>
+                </div>
+
+                <div class="comparison-box optimized">
+                  <div class="comparison-header">
+                    <i class="fa-solid fa-bolt text-green-600"></i> AI ROUTE OPTIMIZATION: ROUTE SCH-RT-01
+                  </div>
+                  <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">Shivpur Bus Terminal → DPS Campus</div>
+                  <div class="comparison-stat text-green-700">15.9 km · 34 mins</div>
+                  <div class="savings-chip">
+                    <i class="fa-solid fa-leaf"></i> Saved: 8 Mins & 2.5 km (19% Fuel & Emission Reduction)
+                  </div>
+                  <div style="margin-top:10px; font-size:13px; line-height:1.6; color:#065f46;">
+                    <strong>AI Recommendation:</strong> Diverts around 3 school-zone pinch points via Ring Road Phase-2 Flyover.
+                  </div>
+                  <button class="btn btn-primary btn-sm" style="margin-top:14px;" onclick="applyOptimizedRoute('rt-001')">
+                    <i class="fa-solid fa-check"></i> Apply AI Optimized Corridor
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================
+             TAB 2: LIVE TRACKING
+             ================================================================ -->
+        <div class="tab-pane" id="pane-tracking" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Real-Time GPS Fleet Tracking Architecture</h2>
+                <p>Interactive tracking with telemetry stream, speed analysis, and stop geofences.</p>
+              </div>
+              <div class="panel-actions">
+                <select class="search-input" id="mapFleetFilter" onchange="filterMapFleet(this.value)" style="width:160px;">
+                  <option value="ALL">All Bus Types</option>
+                  <option value="School Bus">School Buses Only</option>
+                  <option value="College Bus">College Buses Only</option>
+                  <option value="AC">AC Coaches Only</option>
+                  <option value="Non-AC">Non-AC Coaches</option>
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="recenterMap()">
+                  <i class="fa-solid fa-crosshairs"></i> Recenter
+                </button>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0; position:relative;">
+              <div class="map-shell">
+                <div id="trackingMap"></div>
+                <div class="map-floating-overlay">
+                  <strong><i class="fa-solid fa-satellite-dish text-green-600"></i> GPS Telemetry:</strong>
+                  <span id="telemetryStatusText">4 Buses Streaming</span> · Frequency: 1.5s
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 3: BUS MANAGEMENT
+             ================================================================ -->
+        <div class="tab-pane" id="pane-buses" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Fleet Vehicle Management</h2>
+                <p>Complete vehicle specifications, registration records, fuel types, and compliance.</p>
+              </div>
+              <div class="panel-actions">
+                <input type="text" class="search-input" placeholder="Search Reg No, Driver..." oninput="searchBusesTable(this.value)">
+                <button class="btn btn-primary btn-sm" onclick="openAddBusModal()">
+                  <i class="fa-solid fa-plus"></i> Add New Bus
+                </button>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>REGISTRATION</th>
+                      <th>TYPE & AC STATUS</th>
+                      <th>MANUFACTURER & MODEL</th>
+                      <th>CAPACITY</th>
+                      <th>FUEL</th>
+                      <th>ASSIGNED DRIVER & ROUTE</th>
+                      <th>SPEED / GPS</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="busesTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 4: DRIVER MANAGEMENT
+             ================================================================ -->
+        <div class="tab-pane" id="pane-drivers" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Driver Verification & Profiles</h2>
+                <p>Commercial licensing, police verification, medical fitness, and safety credentials.</p>
+              </div>
+              <div class="panel-actions">
+                <input type="text" class="search-input" placeholder="Search driver name, phone..." oninput="searchDriversTable(this.value)">
+                <button class="btn btn-primary btn-sm" onclick="openAddDriverModal()">
+                  <i class="fa-solid fa-user-plus"></i> Register Driver
+                </button>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>DRIVER</th>
+                      <th>CONTACT & ADDRESS</th>
+                      <th>LICENCE & CLASS</th>
+                      <th>LICENCE EXPIRY</th>
+                      <th>EXPERIENCE</th>
+                      <th>VERIFICATIONS</th>
+                      <th>SAFETY SCORE</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="driversTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 5: DRIVER SAFETY SCORES
+             ================================================================ -->
+        <div class="tab-pane" id="pane-driver-safety" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>AI Driver Safety Score Engine (0-100)</h2>
+                <p>Telemetry-based evaluation: speeding, sudden braking, harsh acceleration, and route adherence.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;" id="driverSafetyCardsContainer">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 6: ROUTES & STOPS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-routes" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Transit Routes & Stop Geofences</h2>
+                <p>Scheduled school, college and public passenger corridors.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddRouteModal()">
+                <i class="fa-solid fa-plus"></i> Create Route
+              </button>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px;" id="routesListContainer">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 7: TRIPS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-trips" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Active & Completed Trip Logs</h2>
+                <p>Trip schedules, passenger boarding counts, and average speeds.</p>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>TRIP ID</th>
+                      <th>BUS NUMBER</th>
+                      <th>DRIVER</th>
+                      <th>ROUTE</th>
+                      <th>DEPARTURE</th>
+                      <th>DISTANCE</th>
+                      <th>AVG SPEED</th>
+                      <th>PASSENGERS</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tripsTableBody">
+                    <tr>
+                      <td><strong>TRIP-9021</strong></td>
+                      <td>UP65 AB 1021 (AC School Bus)</td>
+                      <td>Rahul Sharma</td>
+                      <td>DPS Varanasi Campus Express</td>
+                      <td>07:30 AM</td>
+                      <td>18.4 km</td>
+                      <td>38 km/h</td>
+                      <td>38 / 42</td>
+                      <td><span class="badge badge-status-onroute">ON ROUTE</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TRIP-9022</strong></td>
+                      <td>UP65 AB 1022 (AC College Bus)</td>
+                      <td>Manoj Kumar Maurya</td>
+                      <td>BHU University South Route</td>
+                      <td>08:00 AM</td>
+                      <td>14.2 km</td>
+                      <td>44 km/h</td>
+                      <td>48 / 52</td>
+                      <td><span class="badge badge-status-onroute">ON ROUTE</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TRIP-9023</strong></td>
+                      <td>UP65 AB 1024 (Electric School Bus)</td>
+                      <td>Amit Yadav</td>
+                      <td>St. Johns School West Corridor</td>
+                      <td>07:45 AM</td>
+                      <td>15.9 km</td>
+                      <td>52 km/h</td>
+                      <td>34 / 36</td>
+                      <td><span class="badge badge-expired">DIVERTED</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB: LUGGAGE MANAGEMENT & RATE CONFIGURATION
+             ================================================================ -->
+        <div class="tab-pane" id="pane-luggage" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Luggage Policy & Baggage Rate Configuration</h2>
+                <p>Manage passenger baggage limits, free allowance bounds, and dynamic surcharge rates per KG.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px;">
+                <div class="form-container" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px;">
+                  <h3 style="font-size:16px; font-weight:800; margin-bottom:16px; color:#0f172a;">Global Baggage Fare Settings</h3>
+                  
+                  <div class="form-group" style="margin-bottom:18px;">
+                    <label style="font-weight:700; font-size:13px; color:#334155;">Free Luggage Allowance Per Passenger (KG)</label>
+                    <input type="number" id="adminFreeLuggageInput" value="15" min="5" max="30" class="form-control" style="font-size:16px; font-weight:800; width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+                    <small style="color:#64748b; font-size:11px;">Default is strictly 15 KG included free with all passenger bookings.</small>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom:18px;">
+                    <label style="font-weight:700; font-size:13px; color:#334155;">Extra Luggage Charge Rate Per KG (₹ / KG)</label>
+                    <input type="number" id="adminExtraRateInput" value="30" min="10" max="200" class="form-control" style="font-size:16px; font-weight:800; width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+                    <small style="color:#64748b; font-size:11px;">Configurable rate applied automatically to excess baggage above free limit (extraWeight × rate).</small>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom:24px;">
+                    <label style="font-weight:700; font-size:13px; color:#334155;">Excess Baggage Warning Notice</label>
+                    <textarea class="form-control" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12px;" rows="2" readonly>Your luggage exceeds the free 15 KG allowance. Additional charges will be added to your booking.</textarea>
+                  </div>
+
+                  <button type="button" class="btn btn-primary" onclick="saveAdminLuggagePolicy()" style="padding:10px 20px; font-weight:800;">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Luggage Settings
+                  </button>
+                </div>
+
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:24px;">
+                  <h3 style="font-size:16px; font-weight:800; margin-bottom:16px; color:#0f172a;">Fleet Luggage Statistics</h3>
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:14px;">
+                      <div style="font-size:11px; font-weight:700; color:#047857;">FREE ALLOWANCE USAGE</div>
+                      <div style="font-size:24px; font-weight:800; color:#065f46;">88.4%</div>
+                      <small style="color:#047857;">Passengers traveling within 15 KG limit</small>
+                    </div>
+
+                    <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:14px;">
+                      <div style="font-size:11px; font-weight:700; color:#b45309;">EXCESS BAGGAGE CLAIMS</div>
+                      <div style="font-size:24px; font-weight:800; color:#92400e;">11.6%</div>
+                      <small style="color:#b45309;">Passengers billed extra baggage fees</small>
+                    </div>
+
+                    <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:14px;">
+                      <div style="font-size:11px; font-weight:700; color:#334155;">MONTHLY LUGGAGE REVENUE</div>
+                      <div style="font-size:24px; font-weight:800; color:#0f172a;">₹42,850</div>
+                      <small style="color:#64748b;">Collected from excess weight surcharges</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 8: AI INSIGHTS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-ai-insights" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>AI Dynamic Route Optimization & Delay Prediction Engine</h2>
+                <p>Trained heuristic algorithms for student and passenger safety.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+                <div class="comparison-box">
+                  <h3 style="font-size:15px; font-weight:800; margin-bottom:12px;">Route Optimization Calculator</h3>
+                  <div class="form-group" style="margin-bottom:12px;">
+                    <label>Select Route Corridor</label>
+                    <select id="aiRouteSelect" class="search-input" style="width:100%;" onchange="runAIRouteOptimization(this.value)">
+                      <option value="18.4">DPS Varanasi Campus Express (School - 18.4 km)</option>
+                      <option value="14.2">BHU University South Route (College - 14.2 km)</option>
+                      <option value="22.5">Varanasi Ghats & Heritage Line (Public - 22.5 km)</option>
+                    </select>
+                  </div>
+                  <div id="aiOptimizationResultCard">
+                    <!-- Populated -->
+                  </div>
+                </div>
+
+                <div class="comparison-box">
+                  <h3 style="font-size:15px; font-weight:800; margin-bottom:12px;">Delay Probability & Congestion Model</h3>
+                  <div class="form-group" style="margin-bottom:12px;">
+                    <label>Select Bus for Delay Analysis</label>
+                    <select id="aiDelayBusSelect" class="search-input" style="width:100%;" onchange="runAIDelayPrediction(this.value)">
+                      <option value="UP65 AB 1021">UP65 AB 1021 (Tata Starbus AC - School)</option>
+                      <option value="UP65 AB 1022">UP65 AB 1022 (Ashok Leyland Viking AC - College)</option>
+                      <option value="UP65 AB 1024">UP65 AB 1024 (BharatBenz Electric - School)</option>
+                    </select>
+                  </div>
+                  <div id="aiDelayResultCard">
+                    <!-- Populated -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 9: SAFETY & SOS (EMERGENCY)
+             ================================================================ -->
+        <div class="tab-pane" id="pane-safety" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Emergency Incidents & SOS Dispatch Center</h2>
+                <p>Accident detection, vehicle breakdowns, medical incidents, and geofence deviations.</p>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="openSOSModal()">
+                <i class="fa-solid fa-triangle-exclamation"></i> Simulate SOS Alert
+              </button>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>INCIDENT ID</th>
+                      <th>BUS NUMBER</th>
+                      <th>DRIVER</th>
+                      <th>EMERGENCY TYPE</th>
+                      <th>SEVERITY</th>
+                      <th>LOCATION</th>
+                      <th>TIME</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="emergenciesTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 10: MAINTENANCE
+             ================================================================ -->
+        <div class="tab-pane" id="pane-maintenance" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Vehicle Maintenance & Service Records</h2>
+                <p>Fleet servicing intervals, odometer triggers, and scheduled engine/brake overhauls.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddMaintenanceModal()">
+                <i class="fa-solid fa-plus"></i> Log Service Record
+              </button>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>RECORD ID</th>
+                      <th>BUS NUMBER</th>
+                      <th>SERVICE TYPE</th>
+                      <th>SERVICE DATE</th>
+                      <th>NEXT DUE DATE</th>
+                      <th>ODOMETER</th>
+                      <th>SERVICE CENTER</th>
+                      <th>COST (INR)</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="maintenanceTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 11: DOCUMENT EXPIRY
+             ================================================================ -->
+        <div class="tab-pane" id="pane-documents" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Regulatory Document Expiry Radar</h2>
+                <p>Automated countdown alerts for driver licences, insurance, fitness, PUC, and permits.</p>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>DOCUMENT / SUBJECT</th>
+                      <th>ENTITY / HOLDER</th>
+                      <th>EXPIRY DATE</th>
+                      <th>DAYS REMAINING</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="documentsTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 12: NOTIFICATION CENTER
+             ================================================================ -->
+        <div class="tab-pane" id="pane-notifications" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>System Notification Center</h2>
+                <p>Broadcast alerts, safety deviations, and maintenance triggers.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="markAllNotificationsRead()">
+                <i class="fa-solid fa-check-double"></i> Mark All Read
+              </button>
+            </div>
+            <div class="panel-body" id="notificationsListBody">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 13: ANALYTICS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-analytics" style="display:none;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:24px;">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Fleet Utilization (Active vs Maintenance)</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <canvas id="utilizationChart" height="240"></canvas>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Driver Safety Scores Distribution</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <canvas id="safetyScoreChart" height="240"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Average Delay Minutes by Route</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <canvas id="delaysChart" height="240"></canvas>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h2>Maintenance & Fuel Expense Breakdown</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <canvas id="expenseChart" height="240"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 14: EXPORT REPORTS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-reports" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Compliance & Operational Report Generation</h2>
+                <p>Instant exports in CSV and printable PDF formats for audits.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+                <div class="comparison-box">
+                  <h3><i class="fa-solid fa-van-shuttle text-red-600"></i> Fleet Inventory Report</h3>
+                  <p style="font-size:12px; color:var(--text-muted); margin:8px 0 14px;">Complete vehicle specs, AC/Non-AC status, capacity, and registration.</p>
+                  <button class="btn btn-primary btn-sm" onclick="exportReportCSV('buses')">
+                    <i class="fa-solid fa-download"></i> Download CSV
+                  </button>
+                </div>
+
+                <div class="comparison-box">
+                  <h3><i class="fa-solid fa-id-card text-blue-600"></i> Driver Safety Report</h3>
+                  <p style="font-size:12px; color:var(--text-muted); margin:8px 0 14px;">Driver safety scores, licensing details, and verification checks.</p>
+                  <button class="btn btn-primary btn-sm" onclick="exportReportCSV('drivers')">
+                    <i class="fa-solid fa-download"></i> Download CSV
+                  </button>
+                </div>
+
+                <div class="comparison-box">
+                  <h3><i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Safety & SOS Incident Audit</h3>
+                  <p style="font-size:12px; color:var(--text-muted); margin:8px 0 14px;">Full breakdown of SOS emergency alerts and resolution timestamps.</p>
+                  <button class="btn btn-primary btn-sm" onclick="exportReportCSV('emergencies')">
+                    <i class="fa-solid fa-download"></i> Download CSV
+                  </button>
+                </div>
+
+                <div class="comparison-box">
+                  <h3><i class="fa-solid fa-wrench text-green-600"></i> Maintenance Expense Report</h3>
+                  <p style="font-size:12px; color:var(--text-muted); margin:8px 0 14px;">Vehicle servicing costs, parts replacement, and workshop logs.</p>
+                  <button class="btn btn-primary btn-sm" onclick="exportReportCSV('maintenance')">
+                    <i class="fa-solid fa-download"></i> Download CSV
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 15: USERS & RBAC MATRIX
+             ================================================================ -->
+        <div class="tab-pane" id="pane-roles" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Role-Based Access Control (RBAC) Matrix</h2>
+                <p>Security permission enforcement across the 7 application roles.</p>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ROLE</th>
+                      <th>FLEET EDIT</th>
+                      <th>DRIVERS EDIT</th>
+                      <th>ROUTES & TRIPS</th>
+                      <th>SOS DISPATCH</th>
+                      <th>MAINTENANCE</th>
+                      <th>VIEW LIVE TRACKING</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Super Admin</strong></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Transport Admin</strong></td>
+                      <td><span class="badge badge-valid">EDIT</span></td>
+                      <td><span class="badge badge-valid">EDIT</span></td>
+                      <td><span class="badge badge-valid">EDIT</span></td>
+                      <td><span class="badge badge-valid">DISPATCH</span></td>
+                      <td><span class="badge badge-valid">VIEW</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Fleet Manager</strong></td>
+                      <td><span class="badge badge-valid">SPECS ONLY</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dispatcher</strong></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-valid">DISPATCH</span></td>
+                      <td><span class="badge badge-valid">ALERT</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Driver</strong></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-non-ac">OWN PROFILE</span></td>
+                      <td><span class="badge badge-valid">START/END</span></td>
+                      <td><span class="badge badge-valid">TRIGGER SOS</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-valid">OWN BUS</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Security Officer</strong></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-valid">VETTING</span></td>
+                      <td><span class="badge badge-non-ac">READ</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-valid">FULL</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Viewer / Parent</strong></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-non-ac">NONE</span></td>
+                      <td><span class="badge badge-valid">READ-ONLY</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 16: AUDIT LOGS
+             ================================================================ -->
+        <div class="tab-pane" id="pane-audit" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Administrative Activity Audit Log</h2>
+                <p>Tamper-evident system activity monitoring with masked IP addresses.</p>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>LOG ID</th>
+                      <th>ADMINISTRATOR</th>
+                      <th>ROLE</th>
+                      <th>ACTION</th>
+                      <th>MODULE</th>
+                      <th>TIMESTAMP</th>
+                      <th>IP ADDRESS</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="auditTableBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================================
+             TAB 17: ADMIN PROFILE & SECURITY
+             ================================================================ -->
+        <div class="tab-pane" id="pane-profile" style="display:none;">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>Administrator Profile & Security Preferences</h2>
+                <p>Two-factor authentication, session management, and credential updates.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-grid" style="max-width:700px;">
+                <div class="form-group">
+                  <label>Administrator Name</label>
+                  <input type="text" value="Gyananand" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input type="email" value="admin@aibus.in" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="text" value="+91 98765 43210" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Current Assigned Role</label>
+                  <input type="text" value="Super Admin (Level 10)" readonly>
+                </div>
+                <div class="form-group full-width" style="padding:14px; background:#f8fafc; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); margin-top:8px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                      <strong>Two-Factor Authentication (TOTP / Authenticator App)</strong>
+                      <p style="font-size:12px; color:var(--text-muted);">Require secondary code upon signing in.</p>
+                    </div>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="checkbox" checked onchange="showToast('Two-factor authentication preferences updated.')"> <strong>ENABLED</strong>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /content-wrapper -->
+    </main>
+  </div>
+
+  <!-- ====================================================================
+       MODALS
+       ==================================================================== -->
+  
+  <!-- ADD / EDIT BUS MODAL -->
+  <div class="modal-overlay" id="busModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="busModalTitle">Add Vehicle to Fleet</h3>
+        <button class="modal-close" onclick="closeModal('busModal')">&times;</button>
+      </div>
+      <form id="busForm" onsubmit="handleSaveBus(event)">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Registration Number *</label>
+              <input type="text" name="reg_number" placeholder="UP65 AB 1028" required>
+            </div>
+            <div class="form-group">
+              <label>Vehicle Fleet ID *</label>
+              <input type="text" name="vehicle_number" placeholder="BUS-108" required>
+            </div>
+            <div class="form-group">
+              <label>Bus Type *</label>
+              <select name="bus_type" required>
+                <option value="School Bus">School Bus</option>
+                <option value="College Bus">College Bus</option>
+                <option value="Public Transport Bus">Public Transport Bus</option>
+                <option value="Staff Bus">Staff Bus</option>
+                <option value="Luxury Bus">Luxury Bus</option>
+                <option value="Electric Bus">Electric Bus</option>
+                <option value="Mini Bus">Mini Bus</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Air Conditioning (AC) *</label>
+              <select name="is_ac" required>
+                <option value="true">AC Deluxe Coach</option>
+                <option value="false">Non-AC Standard</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Manufacturer *</label>
+              <input type="text" name="manufacturer" placeholder="Tata Motors / Volvo" required>
+            </div>
+            <div class="form-group">
+              <label>Model *</label>
+              <input type="text" name="model" placeholder="Starbus Ultra" required>
+            </div>
+            <div class="form-group">
+              <label>Seating Capacity *</label>
+              <input type="number" name="seating_capacity" min="10" max="65" value="42" required>
+            </div>
+            <div class="form-group">
+              <label>Fuel Type *</label>
+              <select name="fuel_type" required>
+                <option value="CNG">CNG Clean Fuel</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric (EV)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Assigned Driver</label>
+              <input type="text" name="assigned_driver" placeholder="e.g. Rahul Sharma">
+            </div>
+            <div class="form-group">
+              <label>Assigned Route</label>
+              <input type="text" name="assigned_route" placeholder="e.g. DPS Campus Express">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('busModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Vehicle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD DRIVER MODAL -->
+  <div class="modal-overlay" id="driverModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Register Driver Profile</h3>
+        <button class="modal-close" onclick="closeModal('driverModal')">&times;</button>
+      </div>
+      <form id="driverForm" onsubmit="handleSaveDriver(event)">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="full_name" placeholder="Ramesh Chandra" required>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="text" name="mobile" placeholder="+91 98765 22001" required>
+            </div>
+            <div class="form-group">
+              <label>Father's / Mother's Name *</label>
+              <input type="text" name="guardian_name" placeholder="Shri Ram Nath" required>
+            </div>
+            <div class="form-group">
+              <label>Driving Licence Number *</label>
+              <input type="text" name="licence_number" placeholder="UP65-20150091827" required>
+            </div>
+            <div class="form-group">
+              <label>Licence Class *</label>
+              <select name="licence_class" required>
+                <option value="HMV + PSV Badge">HMV (Heavy Commercial) + PSV Badge</option>
+                <option value="HMV Transport Commercial">HMV Transport Commercial</option>
+                <option value="LMV / Commercial Heavy">LMV / Commercial Heavy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Licence Expiry Date *</label>
+              <input type="date" name="licence_expiry" required>
+            </div>
+            <div class="form-group">
+              <label>Blood Group</label>
+              <input type="text" name="blood_group" placeholder="B+">
+            </div>
+            <div class="form-group">
+              <label>Years of Experience *</label>
+              <input type="number" name="experience_years" value="8" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Residential Address *</label>
+              <input type="text" name="address" placeholder="Shivpur, Varanasi, UP" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('driverModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Driver</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SOS EMERGENCY MODAL -->
+  <div class="modal-overlay" id="sosModal">
+    <div class="modal-dialog">
+      <div class="modal-header" style="background:#fef2f2;">
+        <h3 style="color:#991b1b;"><i class="fa-solid fa-triangle-exclamation"></i> Emergency Incident Dispatch</h3>
+        <button class="modal-close" onclick="closeModal('sosModal')">&times;</button>
+      </div>
+      <form onsubmit="handleTriggerSOS(event)">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Bus Involved *</label>
+              <select id="sosBusSelect" required>
+                <option value="UP65 AB 1021">UP65 AB 1021 (School Bus)</option>
+                <option value="UP65 AB 1022">UP65 AB 1022 (College Bus)</option>
+                <option value="UP65 AB 1024">UP65 AB 1024 (School Bus)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Incident Type *</label>
+              <select id="sosTypeSelect" required>
+                <option value="Accident">Accident / Collision</option>
+                <option value="Medical Emergency">Medical Emergency</option>
+                <option value="Vehicle Breakdown">Vehicle Breakdown</option>
+                <option value="Unauthorized Route">Unauthorized Route Deviation</option>
+                <option value="GPS Tampering">GPS Signal Loss / Tampering</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Severity Level *</label>
+              <select id="sosSeveritySelect" required>
+                <option value="CRITICAL">CRITICAL (Immediate Dispatch)</option>
+                <option value="HIGH">HIGH (Escalate to Security)</option>
+                <option value="MEDIUM">MEDIUM (Technical Support)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Location Landmark *</label>
+              <input type="text" id="sosLocationInput" placeholder="Cantonment Flyover, Varanasi" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Incident Description *</label>
+              <textarea id="sosDescInput" rows="3" placeholder="Describe the emergency details..." required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('sosModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger">Broadcast Alert & Dispatch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-notice" id="adminToast">
+    <i class="fa-solid fa-circle-check text-green-400"></i>
+    <span id="toastMsg">Operation successful</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+  <script src="auth-client.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

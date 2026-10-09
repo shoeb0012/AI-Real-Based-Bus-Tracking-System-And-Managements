@@ -1,0 +1,1099 @@
+/* ============================================================================
+   AI BUS TRACK - STATION PASSENGER INFORMATION SYSTEM (PIS) & KIOSK CSS
+   Airport / Metro Terminal Digital Signage + Touchscreen Self-Service Kiosk
+   ============================================================================ */
+
+:root {
+  --kiosk-bg: #090d16;
+  --kiosk-card-bg: #111827;
+  --kiosk-surface: #1e293b;
+  --kiosk-surface-hover: #334155;
+  --kiosk-border: #334155;
+  --kiosk-accent: #a91d32;
+  --kiosk-accent-glow: rgba(169, 29, 50, 0.4);
+  --kiosk-cyan: #06b6d4;
+  --kiosk-emerald: #10b981;
+  --kiosk-amber: #f59e0b;
+  --kiosk-red: #ef4444;
+  --kiosk-blue: #3b82f6;
+  --kiosk-text: #f8fafc;
+  --kiosk-text-muted: #94a3b8;
+  --kiosk-text-dim: #64748b;
+  --font-display: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.station-kiosk-body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--kiosk-bg);
+  color: var(--kiosk-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Top Navigation / Terminal Bar */
+.station-top-bar {
+  background: linear-gradient(180deg, #131b2e 0%, #0d1322 100%);
+  border-bottom: 2px solid #1e293b;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.terminal-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.terminal-logo-badge {
+  background: linear-gradient(135deg, #a91d32 0%, #7f1d1d 100%);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #fff;
+  box-shadow: 0 0 15px var(--kiosk-accent-glow);
+}
+
+.terminal-title-text h1 {
+  margin: 0;
+  font-size: 18px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-title-text small {
+  display: block;
+  font-size: 11px;
+  color: var(--kiosk-cyan);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.station-selector-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--kiosk-border);
+}
+
+.station-selector-box label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--kiosk-text-muted);
+  white-space: nowrap;
+}
+
+.station-selector-box select {
+  background: transparent;
+  border: none;
+  color: #38bdf8;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.station-selector-box select option {
+  background: #111827;
+  color: #fff;
+}
+
+.terminal-clock-weather {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: right;
+}
+
+.digital-clock-led {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 800;
+  color: #facc15;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+  line-height: 1;
+}
+
+.digital-date-sub {
+  font-size: 11px;
+  color: var(--kiosk-text-muted);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.terminal-action-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-kiosk-audio {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-kiosk-audio:hover {
+  background: #334155;
+  color: #38bdf8;
+  border-color: #38bdf8;
+}
+
+.btn-kiosk-touch-booking {
+  background: linear-gradient(135deg, #a91d32 0%, #e11d48 100%);
+  border: 1px solid #fda4af;
+  color: #ffffff;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 15px var(--kiosk-accent-glow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-kiosk-touch-booking:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(225, 29, 72, 0.6);
+}
+
+.btn-kiosk-touch-booking:active {
+  transform: translateY(1px);
+}
+
+/* Scrolling Information Ticker */
+.station-ticker-bar {
+  background: #1e1b4b;
+  border-bottom: 1px solid #312e81;
+  padding: 8px 20px;
+  font-size: 12px;
+  color: #c7d2fe;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ticker-tag {
+  background: #4338ca;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 11px;
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+.ticker-content {
+  white-space: nowrap;
+  animation: tickerSlide 35s linear infinite;
+  display: inline-block;
+  font-weight: 600;
+}
+
+@keyframes tickerSlide {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Main Container Layout */
+.station-kiosk-container {
+  padding: 20px;
+  max-width: 1500px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+}
+
+/* Station Metrics / Status Bar */
+.station-status-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.status-stat-card {
+  background: var(--kiosk-card-bg);
+  border: 1px solid var(--kiosk-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.status-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.stat-icon-amber { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.stat-icon-emerald { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.stat-icon-cyan { background: rgba(6, 182, 212, 0.15); color: #06b6d4; }
+.stat-icon-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+.status-stat-info small {
+  display: block;
+  font-size: 11px;
+  color: var(--kiosk-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-stat-info strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* 5 KM Alert Banner */
+.geofence-station-alert {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  animation: pulseGlow 2.5s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.45); }
+}
+
+.geofence-alert-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.geofence-siren-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #ef4444;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  animation: sirenSpin 1s infinite alternate;
+}
+
+@keyframes sirenSpin {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(8deg); }
+}
+
+.geofence-alert-text h3 {
+  margin: 0;
+  font-size: 16px;
+  font-family: var(--font-display);
+  color: #fee2e2;
+  font-weight: 800;
+}
+
+.geofence-alert-text p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #fca5a5;
+  line-height: 1.4;
+}
+
+.geofence-alert-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.geofence-radar-pill {
+  background: #0f172a;
+  border: 1px solid #ef4444;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fca5a5;
+}
+
+/* The Passenger Information Display Board (PIS) Table */
+.pis-board-container {
+  background: var(--kiosk-card-bg);
+  border: 1px solid var(--kiosk-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  margin-bottom: 24px;
+}
+
+.pis-board-header {
+  background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+  padding: 16px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #334155;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pis-board-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pis-board-title h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+}
+
+.pis-table-scroll {
+  overflow-x: auto;
+}
+
+.pis-board-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.pis-board-table th {
+  background: #0b1120;
+  color: #94a3b8;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  border-bottom: 2px solid #1e293b;
+  white-space: nowrap;
+}
+
+.pis-board-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #1e293b;
+  vertical-align: middle;
+  transition: background 0.15s;
+}
+
+.pis-board-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pis-bus-cell strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.pis-bus-cell small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.pis-route-cell {
+  max-width: 260px;
+}
+
+.pis-route-name {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 14px;
+}
+
+.pis-route-sub {
+  color: #64748b;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.pis-bay-badge {
+  background: #facc15;
+  color: #0f172a;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+}
+
+.pis-time-cell b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.pis-time-cell small {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.pis-dest-time-cell b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: #a7f3d0;
+}
+
+.pis-dest-time-cell small {
+  display: block;
+  font-size: 11px;
+  color: #6ee7b7;
+}
+
+/* Status Badges */
+.badge-pis-status {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.status-5km-alert {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid #ef4444;
+  animation: blinkBorder 1.5s infinite;
+}
+
+@keyframes blinkBorder {
+  0%, 100% { border-color: #ef4444; }
+  50% { border-color: #f87171; }
+}
+
+.status-boarding {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid #10b981;
+}
+
+.status-onroute {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid #3b82f6;
+}
+
+.status-delayed {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid #f59e0b;
+}
+
+.status-departed {
+  background: rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  border: 1px solid #64748b;
+}
+
+.pis-action-btn {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.pis-action-btn:hover {
+  background: #a91d32;
+  border-color: #a91d32;
+  color: #fff;
+}
+
+/* Luggage Strip Banner inside PIS */
+.pis-luggage-policy-strip {
+  background: linear-gradient(90deg, #1e293b 0%, #172554 100%);
+  border-top: 1px solid #334155;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.luggage-policy-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #93c5fd;
+}
+
+.luggage-policy-notice b {
+  color: #ffffff;
+}
+
+/* ============================================================================
+   SELF-SERVICE TOUCHSCREEN KIOSK (PHONE-LESS BOOKING MODAL & WIZARD)
+   ============================================================================ */
+
+.kiosk-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.kiosk-modal-backdrop[hidden] {
+  display: none !important;
+}
+
+.kiosk-terminal-window {
+  background: #0f172a;
+  border: 2px solid #38bdf8;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.3);
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.kiosk-window-header {
+  background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #334155;
+}
+
+.kiosk-window-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kiosk-close-btn {
+  background: #334155;
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.kiosk-close-btn:hover {
+  background: #ef4444;
+}
+
+/* Kiosk Progress Stepper */
+.kiosk-stepper-bar {
+  background: #111827;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #1e293b;
+  overflow-x: auto;
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.step-indicator.active {
+  color: #38bdf8;
+}
+
+.step-indicator.completed {
+  color: #10b981;
+}
+
+.step-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.step-indicator.active .step-circle {
+  background: #0284c7;
+  color: #fff;
+}
+
+.step-indicator.completed .step-circle {
+  background: #10b981;
+  color: #fff;
+}
+
+.kiosk-window-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Form controls in Kiosk Touch Mode */
+.kiosk-touch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.kiosk-touch-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kiosk-touch-field label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.kiosk-touch-field input,
+.kiosk-touch-field select {
+  height: 48px;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  outline: none;
+}
+
+.kiosk-touch-field input:focus,
+.kiosk-touch-field select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.phone-free-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Bus Cards in Kiosk */
+.kiosk-bus-select-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.kiosk-bus-option-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kiosk-bus-option-card:hover {
+  border-color: #0284c7;
+  background: #243248;
+}
+
+.kiosk-bus-option-card.selected {
+  border-color: #38bdf8;
+  background: #172554;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+/* Interactive Seat Map */
+.kiosk-seat-layout {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bus-cabin-front {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kiosk-seat-rows {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.kiosk-seat-btn {
+  height: 48px;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.kiosk-seat-btn:hover:not(.unavailable) {
+  border-color: #38bdf8;
+  background: #334155;
+}
+
+.kiosk-seat-btn.selected {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.kiosk-seat-btn.unavailable {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #475569;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Luggage Counter in Kiosk */
+.kiosk-luggage-box {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.luggage-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 14px 0;
+}
+
+.btn-weight-adjust {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #334155;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.weight-kiosk-display {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 800;
+  color: #facc15;
+}
+
+/* Payment Mode Selectors */
+.payment-tiles-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.pay-tile-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pay-tile-card:hover {
+  border-color: #0284c7;
+}
+
+.pay-tile-card.selected {
+  border-color: #10b981;
+  background: #064e3b;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.pay-tile-icon {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.pay-tile-title {
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+}
+
+.pay-tile-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* Thermal Paper Ticket Layout (Printable) */
+.thermal-ticket-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 10px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-family: 'DM Sans', sans-serif;
+  border-top: 6px solid #a91d32;
+  position: relative;
+}
+
+.thermal-ticket-card::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(45deg, #a91d32, #a91d32 10px, #ffffff 10px, #ffffff 20px);
+}
+
+.ticket-pnr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed #cbd5e1;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.ticket-pnr-val {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 900;
+  color: #a91d32;
+}
+
+.ticket-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.ticket-field-row small {
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ticket-field-row b {
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.ticket-barcode-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 14px 0;
+}
+
+/* Kiosk Footer Navigation */
+.kiosk-window-footer {
+  background: #111827;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #1e293b;
+}
+
+.btn-kiosk-nav {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-kiosk-prev {
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #475569;
+}
+
+.btn-kiosk-next {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+}
+
+/* Responsive Rules */
+@media (max-width: 900px) {
+  .station-top-bar {
+    padding: 10px 14px;
+  }
+  .pis-board-table th, .pis-board-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .thermal-ticket-card, .thermal-ticket-card * {
+    visibility: visible;
+  }
+  .thermal-ticket-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+  }
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "tripId": "TRIP-DEL-LKO-01",
+    "busId": "ait-001",
+    "busNo": "UP32 AB 1234",
+    "driverId": "drv-001",
+    "driverName": "Rajesh Kumar Yadav",
+    "routeId": "ROUTE-DEL-LKO",
+    "source": "Delhi",
+    "destination": "Lucknow",
+    "scheduledDeparture": "2026-10-09T08:00:00.000Z",
+    "actualDeparture": "2026-10-09T08:05:00.000Z",
+    "scheduledArrival": "2026-10-09T14:30:00.000Z",
+    "estimatedArrival": "2026-10-09T14:25:00.000Z",
+    "status": "IN_TRANSIT",
+    "currentLocation": {
+      "lat": 27.1767,
+      "lng": 78.0081,
+      "speedKmH": 68,
+      "heading": 115,
+      "label": "Agra-Lucknow Expressway (KM 142)"
+    },
+    "stops": [
+      { "name": "Delhi Kashmere Gate", "status": "DEPARTED", "time": "08:05 AM" },
+      { "name": "Alambagh Bus Stand", "status": "APPROACHING", "distanceKm": 4.8, "eta": "20 mins" },
+      { "name": "Barabanki Crossing", "status": "SCHEDULED", "distanceKm": 35, "eta": "1h 10m" },
+      { "name": "Ayodhya Bypass", "status": "SCHEDULED", "distanceKm": 130, "eta": "2h 45m" },
+      { "name": "Kanpur Central Stand", "status": "SCHEDULED", "distanceKm": 240, "eta": "5h 15m" }
+    ],
+    "passengerCount": 32,
+    "foodOrdersCount": 4,
+    "delayMinutes": 0,
+    "createdAt": "2026-10-09T07:30:00.000Z",
+    "updatedAt": "2026-10-09T11:15:00.000Z",
+    "deletedAt": null
+  }
+]

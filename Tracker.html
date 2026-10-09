@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#a91d32">
+	<meta name="description" content="Discover, compare and book intercity bus journeys across India with live trip tracking.">
+	<title>AI Bus Track — India's bus network</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+	<link rel="stylesheet" href="Tracker.css">
+	<link rel="stylesheet" href="smart.css">
+	<link rel="stylesheet" href="admin-map.css">
+	<link rel="stylesheet" href="creative-features.css">
+	<link rel="stylesheet" href="volvo-3d-tracker.css">
+	<link rel="stylesheet" href="food.css">
+</head>
+<body>
+	<div class="announcement"><span class="announcement-dot"></span> India's journeys, connected <span class="announcement-separator">•</span> <span>Simple. Reliable. Together.</span></div>
+	<header class="site-header">
+		<a class="brand" href="#home" aria-label="AI Bus Track home">
+			<span class="brand-mark"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 8.5A3.5 3.5 0 0 1 11.5 5h13A3.5 3.5 0 0 1 28 8.5v17a3.5 3.5 0 0 1-3.5 3.5h-13A3.5 3.5 0 0 1 8 25.5z"/><path d="M11 10h14v9H11zM11 22h4m6 0h4M12 29l-2 3m14-3 2 3"/></svg></span>
+			<span class="brand-name">AI <span>Bus</span> Track<small>SMART JOURNEYS · INDIA</small></span>
+		</a>
+		<nav class="main-nav" aria-label="Main navigation"><a class="nav-link active" href="#home">Bus tickets</a><a class="nav-link" href="food.html" style="color:#fbbf24; font-weight:700;">🍱 Food Menu</a><a class="nav-link" href="#highwayRadar">Live Highway</a><a class="nav-link" href="#bus360Experience">360° Fleet View</a><a class="nav-link" href="#luggagePolicy">Luggage Policy (15 KG)</a><a class="nav-link" href="#routes">Popular routes</a><a class="nav-link" href="#liveTracking">Live tracking</a><a class="nav-link" href="display.html" style="color:#38bdf8;">📺 Station PIS</a><a class="nav-link" href="kiosk.html" style="color:#facc15; font-weight:800;">Station Kiosk (बिना फोन) 🚉</a><a class="nav-link" href="driver.html" style="color:#4ade80;">🧭 Driver Desk</a><a class="nav-link" href="smart.html">Smart desk</a><a class="nav-link" href="admin.html">Fleet desk</a></nav>
+		<div class="header-actions"><button class="help-link" id="helpButton" type="button"><span class="help-icon">?</span> Help</button><button class="account-button" id="myBookingButton" type="button"><span class="account-icon">↗</span> My bookings</button><button class="account-button auth-nav-button" id="authNavButton" type="button">Sign in</button><button class="menu-button" id="menuButton" aria-label="Open navigation" type="button">☰</button></div>
+	</header>
+
+	<main id="home">
+		<section class="hero">
+			<img class="hero-photo" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=2200&q=88" alt="A coach bus travelling on an Indian highway">
+			<div class="hero-shade"></div>
+			<div class="hero-content">
+				<div class="eyebrow"><span class="eyebrow-line"></span> SMART TRANSPORTATION & SAFETY SYSTEM</div>
+				<h1>Smart Travel.<br>Real-Time Tracking.<br><span>Safer Journeys.</span></h1>
+				<p>Track your bus, check availability, manage luggage and travel smarter with our AI-powered bus transportation platform.</p>
+				<div class="hero-cta-group" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:18px;">
+					<a href="#searchCard" class="primary-button" style="text-decoration:none; padding:12px 22px; font-weight:800; border-radius:8px;">Book a Bus →</a>
+					<a href="#liveTracking" class="outline-button" style="text-decoration:none; padding:12px 22px; font-weight:800; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; border-color:rgba(255,255,255,0.3);">Track My Bus ⌖</a>
+					<a href="#bus360Experience" class="outline-button" style="text-decoration:none; padding:12px 22px; font-weight:800; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; border-color:rgba(255,255,255,0.3);">Explore 360° Bus ↺</a>
+				</div>
+				<div class="hero-trust" style="margin-top:22px;"><span>✦ 15 KG Free Luggage</span><span>◷ Live GPS Telemetry</span><span>🛡️ AI Safety Scored</span></div>
+			</div>
+			<div class="search-card" id="searchCard" aria-label="Search bus journeys">
+				<div class="search-topline"><div><span class="search-kicker">PLAN YOUR JOURNEY</span><h2>Where would you like to go?</h2></div><div class="network-pill"><span></span> Connecting 50+ cities</div></div>
+				<form id="searchForm" class="search-form">
+					<label class="field city-field"><span class="field-icon from-icon">●</span><span class="field-copy"><span class="field-label">FROM</span><input id="fromCity" name="from" list="cityOptions" placeholder="Leaving from" value="Delhi" required autocomplete="off"></span></label>
+					<button class="swap-button" id="swapButton" type="button" aria-label="Swap departure and destination">⇄</button>
+					<label class="field city-field"><span class="field-icon to-icon">●</span><span class="field-copy"><span class="field-label">TO</span><input id="toCity" name="to" list="cityOptions" placeholder="Going to" value="Jaipur" required autocomplete="off"></span></label>
+					<datalist id="cityOptions"></datalist>
+					<label class="field date-field"><span class="field-icon calendar-icon">▦</span><span class="field-copy"><span class="field-label">JOURNEY DATE</span><input id="travelDate" name="date" type="date" required></span></label>
+					
+					<div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 6px;">
+						<label class="field" style="padding: 6px 10px; margin: 0;">
+							<span class="field-copy">
+								<span class="field-label">TIME</span>
+								<select id="departureTimePref" style="border:none; background:transparent; font-weight:700; font-size:12px; padding:2px 0;">
+									<option value="any">Any Time</option>
+									<option value="morning">Morning (6AM-12PM)</option>
+									<option value="afternoon">Afternoon (12PM-6PM)</option>
+									<option value="evening" selected>Evening (6PM-11PM)</option>
+									<option value="night">Night (11PM-6AM)</option>
+								</select>
+							</span>
+						</label>
+						<label class="field" style="padding: 6px 10px; margin: 0;">
+							<span class="field-copy">
+								<span class="field-label">PASSENGERS</span>
+								<select id="passengerCountPref" style="border:none; background:transparent; font-weight:700; font-size:12px; padding:2px 0;">
+									<option value="1">1 Passenger</option>
+									<option value="2">2 Passengers</option>
+									<option value="3">3 Passengers</option>
+									<option value="4">4 Passengers</option>
+								</select>
+							</span>
+						</label>
+						<label class="field" style="padding: 6px 10px; margin: 0;">
+							<span class="field-copy">
+								<span class="field-label">BUS TYPE</span>
+								<select id="busTypePref" style="border:none; background:transparent; font-weight:700; font-size:12px; padding:2px 0;">
+									<option value="all">All Types</option>
+									<option value="sleeper">AC Sleeper 2+1</option>
+									<option value="seater">AC Seater Pushback</option>
+									<option value="volvo">Volvo Multi-Axle</option>
+									<option value="electric">Electric EV Coach</option>
+								</select>
+							</span>
+						</label>
+						<label class="field" style="padding: 6px 10px; margin: 0;">
+							<span class="field-copy">
+								<span class="field-label">SEAT PREF</span>
+								<select id="seatPref" style="border:none; background:transparent; font-weight:700; font-size:12px; padding:2px 0;">
+									<option value="window">Window Seat</option>
+									<option value="aisle">Aisle Seat</option>
+									<option value="lower">Lower Berth</option>
+									<option value="upper">Upper Berth</option>
+								</select>
+							</span>
+						</label>
+					</div>
+
+					<div style="grid-column: 1 / -1; display:flex; gap:10px; margin-top:8px;">
+						<button class="search-button" type="submit" style="flex:1;"><span>Search Buses</span><span aria-hidden="true">→</span></button>
+						<button class="outline-button" type="button" onclick="$('#searchForm').requestSubmit()" style="padding:10px 16px; font-weight:700; font-size:13px; border-radius:8px;">View Available Buses</button>
+					</div>
+				</form>
+				<div class="quick-picks"><span>Popular:</span><button type="button" data-route="Delhi|Jaipur">Delhi → Jaipur</button><button type="button" data-route="Delhi|Lucknow">Delhi → Lucknow</button><button type="button" data-route="Mumbai|Pune">Mumbai → Pune</button><button type="button" data-route="Bengaluru|Chennai">Bengaluru → Chennai</button></div>
+			</div>
+		</section>
+
+		<section class="assurance-strip" aria-label="Service benefits"><div><span class="assurance-icon">⌖</span><span><b>Wide network</b><small>Across 50+ Indian cities</small></span></div><div><span class="assurance-icon">◷</span><span><b>Live bus updates</b><small>Know where your bus is</small></span></div><div><span class="assurance-icon">♧</span><span><b>Seats for every budget</b><small>Compare before you book</small></span></div><div><span class="assurance-icon">✓</span><span><b>Simple booking</b><small>Clear fares, no surprises</small></span></div></section>
+
+		<!-- REAL VOLVO BUS 3D LIVE HIGHWAY TRACKING & 360° VIEWPORT -->
+		<section class="volvo-3d-section" id="highwayRadar" aria-label="Real Volvo Bus 3D Live Tracking">
+			<div class="content-width">
+				<div class="volvo-3d-header">
+					<div class="volvo-3d-title-group">
+						<span class="section-kicker" style="color:#38bdf8;">REAL-TIME 3D TELEMETRY · VOLVO 9600 MULTI-AXLE</span>
+						<h2>Live 3D Volvo Coach Transit System</h2>
+						<p>Inspect our continuously moving Volvo luxury coach in true 3D WebGL space. Drag to rotate from all 10 angles, zoom, toggle chase camera views, or follow the bus along the highway.</p>
+					</div>
+					<div class="volvo-status-badges">
+						<div class="volvo-mode-badge" id="volvoLiveBadge" onclick="window.toggleLiveDemoMode()" style="cursor:pointer;" title="Click to toggle between Live GPS and Demo Highway simulation">
+							<i class="fa-solid fa-circle"></i> 🟡 DEMO HIGHWAY SIMULATION
+						</div>
+					</div>
+				</div>
+
+				<!-- Main 3D Viewport Card -->
+				<div class="volvo-3d-canvas-card" id="volvo3DCanvasCard">
+					<!-- Top Left HUD: Coach Identity & Route -->
+					<div class="volvo-hud-top-left">
+						<div class="volvo-hud-glass-card">
+							<div class="volvo-hud-bus-name">
+								<i class="fa-solid fa-bus" style="color:#38bdf8;"></i>
+								<span>VOLVO 9600 MULTI-AXLE</span>
+								<small>UP32 AB 1234</small>
+							</div>
+							<div class="volvo-hud-route-sub">
+								<i class="fa-solid fa-route"></i>
+								<span>Delhi (Kashmere Gate ISBT) ➔ Lucknow (Alambagh)</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Top Right HUD: Digital Speedometer -->
+					<div class="volvo-hud-top-right">
+						<div class="volvo-speedometer-badge">
+							<div>
+								<span class="volvo-speed-number" id="volvoSpeedNumber">65</span>
+								<span class="volvo-speed-unit">KM/H</span>
+							</div>
+							<div class="volvo-speed-label" id="volvoSpeedGov">SPEED GOVERNOR: 80 LIMIT</div>
+						</div>
+					</div>
+
+					<!-- Bottom HUD: Telemetry strip & Quick Action Buttons -->
+					<div class="volvo-hud-bottom-bar">
+						<div class="volvo-telemetry-strip">
+							<div class="volvo-telemetry-pill">
+								<i class="fa-solid fa-location-crosshairs" style="color:#10b981;"></i>
+								<span id="volvoTelemetryLoc">26.8467°N, 80.9462°E (Mile 148)</span>
+							</div>
+							<div class="volvo-telemetry-pill">
+								<i class="fa-solid fa-hourglass-half" style="color:#f59e0b;"></i>
+								<span>Next: <strong id="volvoTelemetryNext">Mathura Toll</strong> · <strong id="volvoTelemetryEta">In 18 Mins</strong></span>
+							</div>
+						</div>
+
+						<div class="volvo-quick-toggles">
+							<button type="button" class="volvo-hud-btn active" id="btnToggleFollow" onclick="window.toggleFollowBus()" title="Keep camera locked on the moving coach">
+								<i class="fa-solid fa-crosshairs"></i> Follow Bus
+							</button>
+							<button type="button" class="volvo-hud-btn" id="btnToggleDayNight" onclick="window.cycleLighting()" title="Toggle Day, Sunset, and Night lighting">
+								<i class="fa-solid fa-moon"></i> Night Mode
+							</button>
+						</div>
+					</div>
+
+					<!-- Loading Overlay -->
+					<div class="volvo-loading-overlay" id="volvo3DLoader">
+						<div class="volvo-spinner"></div>
+						<div class="volvo-loading-text">Initializing 3D Volvo Coach & Highway Corridor…</div>
+					</div>
+
+					<!-- 3D Three.js Viewport Mount Point -->
+					<div id="volvo3DViewport" style="width:100%; height:100%;"></div>
+				</div>
+
+				<!-- All-Angle Camera & Movement Control Center -->
+				<div class="volvo-controls-panel" id="bus360ControlsBar">
+					<div class="volvo-camera-section-title">
+						<span><i class="fa-solid fa-camera"></i> Interactive 3D Camera Angles (Live Moving Model)</span>
+						<span style="color:#64748b; font-size:11px;">Drag mouse or touch swipe to orbit 360° • Scroll to zoom</span>
+					</div>
+
+					<!-- 10 CAMERA PRESET BUTTONS (All render the exact same moving 3D bus model) -->
+					<div class="volvo-angles-grid">
+						<button type="button" class="volvo-angle-btn" data-angle="front" onclick="window.setCameraView('front')">
+							<i class="fa-solid fa-arrow-up"></i> Front View
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="rear" onclick="window.setCameraView('rear')">
+							<i class="fa-solid fa-arrow-down"></i> Rear View (Chase)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="left" onclick="window.setCameraView('left')">
+							<i class="fa-solid fa-arrow-left"></i> Left Side View
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="right" onclick="window.setCameraView('right')">
+							<i class="fa-solid fa-arrow-right"></i> Right Side View
+						</button>
+						<button type="button" class="volvo-angle-btn active" data-angle="front-left" onclick="window.setCameraView('front-left')">
+							<i class="fa-solid fa-arrows-to-dot"></i> Front-Left (3/4)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="front-right" onclick="window.setCameraView('front-right')">
+							<i class="fa-solid fa-arrows-to-dot"></i> Front-Right (3/4)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="rear-left" onclick="window.setCameraView('rear-left')">
+							<i class="fa-solid fa-compass"></i> Rear-Left (3/4)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="rear-right" onclick="window.setCameraView('rear-right')">
+							<i class="fa-solid fa-compass"></i> Rear-Right (3/4)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="top" onclick="window.setCameraView('top')">
+							<i class="fa-solid fa-satellite"></i> Top View (Drone)
+						</button>
+						<button type="button" class="volvo-angle-btn" data-angle="orbit360" onclick="window.setCameraView('orbit360')">
+							<i class="fa-solid fa-rotate"></i> Free 360° Orbit View
+						</button>
+					</div>
+
+					<!-- Secondary Control Bar -->
+					<div class="volvo-secondary-bar">
+						<div class="volvo-speed-selector">
+							<span>Highway Transit Speed:</span>
+							<button type="button" class="volvo-speed-btn active" data-speed="normal" onclick="window.setHighwaySpeed('normal')">Standard 65 km/h</button>
+							<button type="button" class="volvo-speed-btn" data-speed="express" onclick="window.setHighwaySpeed('express')">Express 85 km/h</button>
+							<button type="button" class="volvo-speed-btn" data-speed="turbo" onclick="window.setHighwaySpeed('turbo')">Cruise 110 km/h</button>
+						</div>
+
+						<div class="volvo-action-group">
+							<button type="button" class="volvo-hud-btn" onclick="window.reset360View()" title="Reset Camera View to default angle">
+								<i class="fa-solid fa-arrows-rotate"></i> Reset Camera
+							</button>
+							<button type="button" class="volvo-hud-btn" onclick="window.toggleLiveDemoMode()" title="Toggle Live GPS telemetry feed">
+								<i class="fa-solid fa-satellite-dish"></i> Toggle Live/Demo
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="results-section content-width" id="resultsSection" hidden>
+			<div class="section-heading result-heading"><div><span class="section-kicker">YOUR TRIP, YOUR WAY</span><h2 id="resultsTitle">Buses for your journey</h2><p id="resultsSubtitle">Compare departure times, arrival estimates and available seats.</p><div class="bus-lookup"><label class="bus-lookup-label" for="busLookup">Filter buses</label><input id="busLookup" type="search" placeholder="Bus number or operator"><button id="voiceSearchButton" type="button" title="Search by voice">🎙 Search by voice</button><span id="voiceSearchHelp">Try: bus 1234</span><a href="smart.html" id="smartRecommendationsLink">See route recommendations ↗</a></div></div><div class="result-count" id="resultCount">Searching…</div></div>
+			<div class="results-layout"><div class="bus-list" id="busList" aria-live="polite"></div><aside class="journey-aside"><div class="journey-map-card"><div class="map-card-heading"><span><b>Journey at a glance</b><small id="mapRouteLabel">Live route preview</small></span><span class="live-badge"><i></i> LIVE</span></div><div id="routeMap" aria-label="Map showing bus route"></div><div class="map-legend"><span><i class="legend-origin"></i> Departure</span><span><i class="legend-bus"></i> Bus location</span><span><i class="legend-destination"></i> Arrival</span></div></div><div class="route-note"><span class="note-icon">i</span><p>Times and seat availability are sample demo data. Please confirm details with the operator before travel.</p></div></aside></div>
+		</section>
+
+		<!-- 360-Degree Bus 3D Viewer & Scenic Route Panorama -->
+		<section class="experience-360-section" id="bus360Experience">
+			<div class="content-width">
+				<div class="section-heading">
+					<div>
+						<span class="section-kicker">360° INTERACTIVE FLEET & ROUTE VIEWER</span>
+						<h2>Experience AI Bus Track in 360°</h2>
+						<p>Inspect our smart coach exterior & interior hotspots or slide through scenic highway panoramas.</p>
+					</div>
+				</div>
+
+				<div class="experience-grid">
+					<!-- 360 Bus Viewer Card -->
+					<div class="viewer-360-card">
+						<div class="viewer-header">
+							<div>
+								<span class="badge-360"><i class="fa-solid fa-cube"></i> 360° 3D VOLVO STUDIO</span>
+								<h3 style="margin: 6px 0 0; font-size: 16px;">Volvo 9600 Multi-Axle Luxury Coach</h3>
+							</div>
+							<div style="display:flex; align-items:center; gap:8px;">
+								<span style="font-weight: 800; font-size: 14px; color: #a91d32;" id="angleDisplay">0°</span>
+								<a href="#highwayRadar" class="outline-button" style="padding:4px 8px; font-size:11px; text-decoration:none;"><i class="fa-solid fa-arrow-up"></i> Live Highway</a>
+							</div>
+						</div>
+
+						<div class="bus-3d-stage" id="bus360Stage">
+							<div class="bus-3d-canvas-wrap" id="bus360Canvas" style="width:100%; height:100%;"></div>
+							<!-- Hotspots -->
+							<button type="button" class="bus-hotspot hotspot-luggage" onclick="window.showHotspotInfo('luggage')" title="Luggage Hold (15 KG Free Allowance)">🧳</button>
+							<button type="button" class="bus-hotspot hotspot-deck" onclick="window.showHotspotInfo('deck')" title="AC Passenger Deck">❄️</button>
+							<button type="button" class="bus-hotspot hotspot-cockpit" onclick="window.showHotspotInfo('cockpit')" title="AI Safety Cockpit">🛡️</button>
+							<button type="button" class="bus-hotspot hotspot-exit" onclick="window.showHotspotInfo('exit')" title="Emergency Exit">🚨</button>
+						</div>
+
+						<div class="controls-360">
+							<i class="fa-solid fa-rotate-left" style="color: #64748b; font-size: 14px;"></i>
+							<input type="range" min="0" max="360" value="0" class="slider-360" id="bus360Slider" oninput="window.setBus360Angle(this.value)">
+							<i class="fa-solid fa-rotate-right" style="color: #64748b; font-size: 14px;"></i>
+							<div class="zoom-controls">
+								<button type="button" class="zoom-btn" onclick="window.zoomIn360()" title="Zoom In">+</button>
+								<button type="button" class="zoom-btn" onclick="window.zoomOut360()" title="Zoom Out">−</button>
+								<button type="button" class="zoom-btn" onclick="window.reset360View()" title="Reset View" style="font-size:12px; width:auto; padding:0 8px;">↺ Reset</button>
+							</div>
+							<button type="button" class="btn-rotate-auto" id="auto360Btn" onclick="window.toggleAuto360Rotation()"><i class="fa-solid fa-rotate"></i> Auto 360°</button>
+						</div>
+
+						<div class="view-360-presets">
+							<button type="button" class="preset-angle-btn active" id="presetFront" onclick="window.setPresetAngle(0, 'Front')">Front View</button>
+							<button type="button" class="preset-angle-btn" id="presetLeft" onclick="window.setPresetAngle(90, 'Left')">Left Profile</button>
+							<button type="button" class="preset-angle-btn" id="presetRear" onclick="window.setPresetAngle(180, 'Rear')">Rear View</button>
+							<button type="button" class="preset-angle-btn" id="presetRight" onclick="window.setPresetAngle(270, 'Right')">Right Profile</button>
+							<button type="button" class="preset-angle-btn" id="presetInterior" onclick="window.setPresetAngle(0, 'Interior')">Interior AC Deck</button>
+							<button type="button" class="preset-angle-btn" id="presetExterior" onclick="window.setPresetAngle(45, 'Exterior')">3D Isometric</button>
+						</div>
+					</div>
+
+					<!-- Scenic Route 360 Panorama Slideshow -->
+					<div class="route-panorama-card">
+						<div class="panorama-viewport">
+							<img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1400&q=85" id="panoramaSlideImg" alt="Scenic Route Highway Panorama" class="panorama-image">
+							<div class="panorama-caption">
+								<h4 id="panoramaTitle">Delhi ➔ Jaipur (Royal Express)</h4>
+								<p id="panoramaSubtitle">Scenic Aravalli Highway Corridor · 260 km · 5 hrs</p>
+							</div>
+						</div>
+						<div class="panorama-nav-bar">
+							<button type="button" class="outline-button" style="padding: 4px 10px; font-size: 11px;" onclick="window.prevSlide()">← Previous</button>
+							<div class="slide-dots">
+								<span class="slide-dot active" onclick="window.showSlide(0)"></span>
+								<span class="slide-dot" onclick="window.showSlide(1)"></span>
+								<span class="slide-dot" onclick="window.showSlide(2)"></span>
+								<span class="slide-dot" onclick="window.showSlide(3)"></span>
+							</div>
+							<button type="button" class="outline-button" style="padding: 4px 10px; font-size: 11px;" onclick="window.nextSlide()">Next →</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Smart Luggage Policy & Live Baggage Fare Calculator -->
+		<section class="luggage-policy-section" id="luggagePolicy">
+			<div class="content-width">
+				<div class="section-heading">
+					<div>
+						<span class="section-kicker">LUGGAGE POLICY · लगेज नियम</span>
+						<h2>Transparent Baggage Allowance & Charges</h2>
+						<p>हर यात्री के टिकट के साथ 15 KG लगेज पूरी तरह मुफ़्त (Free) है। 15 KG से अधिक वजन पर अतिरिक्त चार्ज लागू होता है।</p>
+					</div>
+				</div>
+
+				<div class="luggage-grid">
+					<!-- Policy Explanations -->
+					<div class="policy-cards-col">
+						<div class="policy-box free-allowance">
+							<div class="policy-icon-badge">🧳</div>
+							<div>
+								<h3>Up to 15 KG Free Allowance (15 केजी मुफ़्त सीमा)</h3>
+								<p>प्रत्येक कन्फर्म टिकट के साथ <strong>15 किलोग्राम तक का सामान बिल्कुल फ्री</strong> है। इसमें केबिन बैग या निचला लगेज बैग शामिल है। इस सीमा के अंदर कोई भी अतिरिक्त शुल्क नहीं लिया जाएगा।</p>
+							</div>
+						</div>
+
+						<div class="policy-box excess-baggage">
+							<div class="policy-icon-badge">⚖️</div>
+							<div>
+								<h3>Excess Luggage @ ₹30 / Extra KG (अतिरिक्त लगेज शुल्क)</h3>
+								<p>यदि आपका कुल सामान <strong>15 KG की बाउंडेशन से अधिक</strong> होता है, तो 15 KG के ऊपर प्रति अतिरिक्त किलोग्राम मात्र <strong>₹30 प्रति KG</strong> का पारदर्शी चार्ज लगेगा। टिकट बुकिंग के समय ही रसीद में यह जुड़ जाता है।</p>
+							</div>
+						</div>
+
+						<div class="policy-box" style="background: #f1f5f9;">
+							<div class="policy-icon-badge" style="background: #475569; color: #fff;">🔒</div>
+							<div>
+								<h3>RFID Barcode Tagging & Safety Guarantee</h3>
+								<p>आपके सभी बैग डिजिटल लगेज टैग से लॉक होते हैं। बस ड्राइवर और कंडक्टर के पास लगेज मेनिफेस्ट रिकॉर्ड रहता है ताकि आपका सामान 100% सुरक्षित रहे।</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Interactive Calculator Card -->
+					<div class="luggage-calculator-card">
+						<h3 class="calculator-title">Live Baggage Fare Calculator</h3>
+						<p class="calculator-desc">अपने सामान का वजन (Weight) सेट करें और देखें कि कितना चार्ज लगेगा:</p>
+
+						<div class="weight-display-box">
+							<div style="font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.5px; margin-bottom: 6px;">TOTAL BAGGAGE WEIGHT</div>
+							<div class="weight-value-big" id="calcWeightDisplay">15 <small>KG</small></div>
+							<div style="margin-top: 10px;">
+								<span class="fee-badge-status fee-badge-free" id="calcFeeBadge">✓ 100% FREE (WITHIN 15 KG LIMIT)</span>
+							</div>
+
+							<div class="fee-breakdown-row">
+								<span>Extra Weight:</span>
+								<strong id="calcExtraKgText">0 kg extra (Free allowance applied)</strong>
+							</div>
+							<div class="fee-breakdown-row">
+								<span>Excess Baggage Fee:</span>
+								<strong id="calcExtraFeeText" style="color: #10b981;">₹0 (Included with ticket)</strong>
+							</div>
+						</div>
+
+						<label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 8px;">Adjust Baggage Weight (KG):</label>
+						<input type="range" id="luggageWeightSlider" min="5" max="45" step="1" value="15" style="width: 100%; accent-color: #a91d32; cursor: pointer;" oninput="window.setCalculatorWeight(this.value)">
+
+						<div class="weight-preset-btns">
+							<button type="button" class="preset-btn" data-weight="10" onclick="window.setCalculatorWeight(10)">10 KG (Free)</button>
+							<button type="button" class="preset-btn active" data-weight="15" onclick="window.setCalculatorWeight(15)">15 KG (Free Limit)</button>
+							<button type="button" class="preset-btn" data-weight="20" onclick="window.setCalculatorWeight(20)">20 KG (+₹150)</button>
+							<button type="button" class="preset-btn" data-weight="25" onclick="window.setCalculatorWeight(25)">25 KG (+₹300)</button>
+							<button type="button" class="preset-btn" data-weight="30" onclick="window.setCalculatorWeight(30)">30 KG (+₹450)</button>
+						<div class="luggage-warning-banner" id="luggageWarningBanner" style="display:none;">
+							<i class="fa-solid fa-triangle-exclamation" style="font-size:18px;"></i>
+							<span>Your luggage exceeds the free 15 KG allowance. Additional charges will be added to your booking (@ ₹30/kg extra).</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 5. LIVE BUS TRACKING SHOWCASE (UP32 AB 1234 Delhi -> Lucknow) -->
+		<section class="tracking-showcase-section" id="liveTracking">
+			<div class="content-width">
+				<div class="section-heading" style="color:#ffffff;">
+					<div>
+						<span class="section-kicker" style="color:#38bdf8;">REAL-TIME TELEMETRY · SATELLITE GPS</span>
+						<h2 style="color:#ffffff;">Live Bus Tracking Radar</h2>
+						<p style="color:#94a3b8;">Monitor active highway coaches with live speedometers, distance countdown, and route progress.</p>
+					</div>
+				</div>
+
+				<div class="tracking-showcase-grid">
+					<!-- Telemetry Status Card -->
+					<div class="telemetry-card">
+						<div class="telemetry-header">
+							<div>
+								<span class="telemetry-route-badge">DELHI ➔ LUCKNOW EXPRESS</span>
+								<h3 style="margin: 8px 0 2px; font-size: 20px; font-family: 'Manrope', sans-serif;">BUS UP32 AB 1234</h3>
+								<small style="color: #94a3b8;"><i class="fa-solid fa-shield-halved" style="color:#10b981;"></i> Driver: Rajesh Kumar (Verified · 4.9★)</small>
+							</div>
+							<span class="highway-live-badge"><i class="fa-solid fa-circle"></i> ON ROUTE</span>
+						</div>
+
+						<div class="telemetry-metrics-grid">
+							<div class="metric-tile">
+								<div class="metric-tile-label">Estimated Arrival</div>
+								<div class="metric-tile-val">08:35 PM</div>
+								<small style="color:#10b981; font-size:11px;">On Time (AI Verified)</small>
+							</div>
+							<div class="metric-tile">
+								<div class="metric-tile-label">Distance Remaining</div>
+								<div class="metric-tile-val">42 KM</div>
+								<small style="color:#94a3b8; font-size:11px;">Approx 38 mins</small>
+							</div>
+							<div class="metric-tile">
+								<div class="metric-tile-label">Current Speed</div>
+								<div class="metric-tile-val" style="color:#facc15;">62 KM/H</div>
+								<small style="color:#94a3b8; font-size:11px;">Speed Governor: 80 Max</small>
+							</div>
+							<div class="metric-tile">
+								<div class="metric-tile-label">GPS Telemetry</div>
+								<div class="metric-tile-val" style="color:#10b981; font-size:14px; margin-top:4px;">26.8467°N, 80.9462°E</div>
+								<small style="color:#94a3b8; font-size:11px;">Purvanchal Highway Mile 148</small>
+							</div>
+						</div>
+
+						<div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+							<span><i class="fa-solid fa-circle-info" style="color:#38bdf8;"></i> Demo Simulated GPS Feed</span>
+							<button type="button" class="outline-button" style="padding:4px 10px; font-size:11px; color:#fff; border-color:rgba(255,255,255,0.3);" onclick="toast('Refreshing telemetry from GPS satellite feed…')">↻ Refresh Telemetry</button>
+						</div>
+					</div>
+
+					<!-- Visual Route Map Card -->
+					<div class="journey-map-card" style="margin:0; box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">
+						<div class="map-card-heading">
+							<span><b>Delhi ➔ Lucknow Corridor</b><small>Live Highway View (UP32 AB 1234)</small></span>
+							<span class="live-badge"><i></i> RADAR LIVE</span>
+						</div>
+						<div id="showcaseLiveMap" style="height: 320px; width: 100%; border-radius: 8px;" aria-label="Interactive Live Bus Map"></div>
+						<div class="map-legend">
+							<span><i class="legend-origin"></i> Kashmiri Gate (Delhi)</span>
+							<span><i class="legend-bus"></i> Active Bus UP32 AB 1234</span>
+							<span><i class="legend-destination"></i> Alambagh (Lucknow)</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- 5 KM PASSENGER PROXIMITY GEOFENCE RADAR PANEL -->
+				<div class="geofence-radar-panel" id="geofenceRadarPanel">
+					<div class="geofence-panel-header">
+						<div class="geofence-panel-title">
+							<i class="fa-solid fa-radar fa-spin" style="color:#ef4444; font-size:24px; animation-duration:4s;"></i>
+							<div>
+								<h3>5 KM Origin Proximity Geofence Radar · 5 किमी यात्री अलर्ट प्रणाली</h3>
+								<small>Automatic Emergency Warning Alert when Bus is within 5 KM of Boarding Point</small>
+							</div>
+						</div>
+						<div id="geofenceStatusBadge" class="geofence-status-badge">
+							<i class="fa-solid fa-clock"></i> ON TRACK (BUS DISTANT)
+						</div>
+					</div>
+
+					<div class="geofence-metrics-row">
+						<div class="geofence-metric-box">
+							<small>Booked Passenger</small>
+							<strong>Rajesh Verma · Seat 14A</strong>
+						</div>
+						<div class="geofence-metric-box">
+							<small>Origin Boarding Point</small>
+							<strong style="color:#38bdf8;">Kashmere Gate ISBT (Bay 04)</strong>
+						</div>
+						<div class="geofence-metric-box">
+							<small>Bus Distance to Origin</small>
+							<strong id="geofenceBusDistanceVal" style="color:#facc15;">8.5 KM</strong>
+						</div>
+						<div class="geofence-metric-box">
+							<small>Estimated Arrival at Stop</small>
+							<strong id="geofenceBusEtaVal" style="color:#10b981;">In 13 Mins</strong>
+						</div>
+					</div>
+
+					<div class="geofence-controls-row">
+						<div class="passenger-state-toggle">
+							<span style="font-size:12px; font-weight:700; color:#94a3b8;">यात्री की स्थिति (Passenger Status):</span>
+							<button type="button" class="btn-geofence-toggle active" id="btnPassengerEnRoute" onclick="window.setPassengerOriginStatus(false)">
+								<i class="fa-solid fa-person-walking"></i> रास्ते में हैं (Not at Station)
+							</button>
+							<button type="button" class="btn-geofence-toggle" id="btnPassengerAtStation" onclick="window.setPassengerOriginStatus(true)">
+								<i class="fa-solid fa-circle-check"></i> स्टेशन पहुंच गए (At Station)
+							</button>
+						</div>
+
+						<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+							<span style="font-size:11px; color:#94a3b8;">Distance Simulator:</span>
+							<input type="range" id="geofenceDistanceSlider" min="0.5" max="15" step="0.5" value="8.5" style="width:130px; accent-color:#ef4444;" oninput="window.setBusGeofenceDistance(this.value)">
+							<button type="button" class="btn-geofence-test" onclick="window.trigger5KmAlertSimulation()">
+								<i class="fa-solid fa-triangle-exclamation"></i> 5 किमी अलर्ट टेस्ट करें (Simulate Alert)
+							</button>
+							<a href="kiosk.html" class="outline-button" style="text-decoration:none; padding:8px 14px; font-size:11px; border-radius:6px; color:#fff; border-color:#38bdf8; background:rgba(56,189,248,0.15);">
+								<i class="fa-solid fa-display"></i> Station Display Board ↗
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 6. AI SMART TRAVEL SUITE -->
+		<section class="ai-smart-section" id="aiSmartTravel">
+			<div class="content-width">
+				<div class="section-heading">
+					<div>
+						<span class="section-kicker">ARTIFICIAL INTELLIGENCE · SMART TRANSIT</span>
+						<h2>AI Smart Travel Engine</h2>
+						<p>Deep predictive models analyzing live highway traffic, weather, road curvature, and passenger flow.</p>
+					</div>
+				</div>
+
+				<div class="ai-cards-grid">
+					<!-- AI ETA Prediction -->
+					<div class="ai-feature-card">
+						<div class="ai-card-icon icon-blue"><i class="fa-solid fa-stopwatch"></i></div>
+						<h3 style="font-size:16px; margin-bottom:6px;">AI ETA Prediction</h3>
+						<p style="font-size:13px; color:#64748b; line-height:1.5;">Calculates hyper-accurate arrival times using historical travel data, live toll booth congestion, and weather telemetry. 98.4% predictive accuracy.</p>
+						<div style="margin-top:12px; font-size:12px; font-weight:700; color:#0284c7;">✓ Real-time delay alerts to passengers</div>
+					</div>
+
+					<!-- AI Route Optimization -->
+					<div class="ai-feature-card">
+						<div class="ai-card-icon icon-emerald"><i class="fa-solid fa-route"></i></div>
+						<h3 style="font-size:16px; margin-bottom:6px;">AI Route Optimization</h3>
+						<p style="font-size:13px; color:#64748b; line-height:1.5;">Evaluates traffic patterns and dynamically recommends bypass corridors to avoid roadworks and bottlenecks.</p>
+						<div style="background:#f1f5f9; padding:8px 10px; border-radius:6px; margin-top:10px; font-size:11px;">
+							<div>Original: <strong>18.4 km · 42 mins</strong></div>
+							<div style="color:#059669;">AI Optimized: <strong>15.9 km · 34 mins</strong></div>
+							<strong style="color:#059669;">Saving: 8 mins · 2.5 km fuel</strong>
+						</div>
+					</div>
+
+					<!-- AI Demand Prediction -->
+					<div class="ai-feature-card">
+						<div class="ai-card-icon icon-purple"><i class="fa-solid fa-chart-line"></i></div>
+						<h3 style="font-size:16px; margin-bottom:6px;">AI Demand Forecasting</h3>
+						<p style="font-size:13px; color:#64748b; line-height:1.5;">Forecasts weekend holiday rushes, student transit demand, and festival surges, automatically scaling fleet dispatch frequency.</p>
+						<div style="margin-top:12px; font-size:12px; font-weight:700; color:#9333ea;">✓ Dynamic bus scheduling</div>
+					</div>
+
+					<!-- AI Safety Monitoring -->
+					<div class="ai-feature-card">
+						<div class="ai-card-icon icon-amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
+						<h3 style="font-size:16px; margin-bottom:6px;">AI Safety & Risk Monitoring</h3>
+						<p style="font-size:13px; color:#64748b; line-height:1.5;">Continuous computer-vision analysis for driver fatigue (drowsiness), sudden deceleration, overspeeding, and route deviation.</p>
+						<div style="margin-top:12px; font-size:12px; font-weight:700; color:#d97706;">✓ Instant Control Room SOS dispatch</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 7. SAFETY FIRST SECTION -->
+		<section class="safety-section" id="safetyFirst">
+			<div class="content-width">
+				<div class="section-heading">
+					<div>
+						<span class="section-kicker">PASSENGER SECURITY · AIS-052 COMPLIANT</span>
+						<h2>Safety First in Every Journey</h2>
+						<p>Commercial-grade passenger safety protocols engineered for peace of mind.</p>
+					</div>
+				</div>
+
+				<div class="safety-grid">
+					<div class="safety-card">
+						<div style="font-size:24px; margin-bottom:8px;">👮</div>
+						<h3 style="font-size:15px; margin-bottom:4px;">100% Verified Drivers</h3>
+						<p style="font-size:12px; color:#64748b;">Aadhaar biometrics, police background checks, commercial HMV licences, and annual medical fitness verification.</p>
+					</div>
+
+					<div class="safety-card">
+						<div style="font-size:24px; margin-bottom:8px;">🛰️</div>
+						<h3 style="font-size:15px; margin-bottom:4px;">Live Satellite GPS</h3>
+						<p style="font-size:12px; color:#64748b;">Tamper-proof GPS transponders broadcasting coordinates every 5 seconds to the centralized 24/7 Control Desk.</p>
+					</div>
+
+					<div class="safety-card">
+						<div style="font-size:24px; margin-bottom:8px;">🚨</div>
+						<h3 style="font-size:15px; margin-bottom:4px;">Emergency SOS Button</h3>
+						<p style="font-size:12px; color:#64748b;">Physical passenger SOS buttons at every row and one-touch digital dispatch directly connected to highway police (112).</p>
+					</div>
+
+					<div class="safety-card">
+						<div style="font-size:24px; margin-bottom:8px;">🛡️</div>
+						<h3 style="font-size:15px; margin-bottom:4px;">Geofence Deviation Alerts</h3>
+						<p style="font-size:12px; color:#64748b;">Automatic security alarm triggers if any vehicle deviates more than 500 meters from its assigned national highway corridor.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 8. BUS AMENITIES & FEATURES -->
+		<section class="content-width" style="padding:40px 0 20px;">
+			<div class="section-heading">
+				<div>
+					<span class="section-kicker">ONBOARD COMFORT</span>
+					<h2>World-Class Travel Experience</h2>
+					<p>Every coach is engineered for luxury, connectivity, and smooth journeys.</p>
+				</div>
+			</div>
+
+			<div class="amenities-strip">
+				<div class="amenity-item">
+					<div class="amenity-icon"><i class="fa-solid fa-wifi"></i></div>
+					<span>High-Speed WiFi</span>
+				</div>
+				<div class="amenity-item">
+					<div class="amenity-icon"><i class="fa-solid fa-plug"></i></div>
+					<span>Type-C Fast Charging</span>
+				</div>
+				<div class="amenity-item">
+					<div class="amenity-icon"><i class="fa-solid fa-couch"></i></div>
+					<span>160° Pushback Recliner</span>
+				</div>
+				<div class="amenity-item">
+					<div class="amenity-icon"><i class="fa-solid fa-video"></i></div>
+					<span>CCTV Surveillance</span>
+				</div>
+				<div class="amenity-item">
+					<div class="amenity-icon"><i class="fa-solid fa-bottle-water"></i></div>
+					<span>Complimentary Water</span>
+				</div>
+			</div>
+		</section>
+
+		<!-- 9. PASSENGER REVIEWS & TESTIMONIALS -->
+		<section class="content-width" style="padding:40px 0;">
+			<div class="section-heading">
+				<div>
+					<span class="section-kicker">TESTIMONIALS</span>
+					<h2>Loved by 12,000+ Daily Travelers</h2>
+					<p>Real feedback from intercity passengers, students, and family commuters.</p>
+				</div>
+			</div>
+
+			<div class="reviews-grid">
+				<div class="review-card">
+					<div style="color:#eab308; margin-bottom:8px;">★★★★★</div>
+					<p style="font-size:13px; color:#334155; line-height:1.6;">"The 15 KG free luggage allowance was a blessing for my college trip to Jaipur. We carried two large bags without any extra charge. Super transparent system!"</p>
+					<div style="margin-top:12px; font-weight:700; font-size:12px; color:#0f172a;">— Ananya Verma · Delhi ➔ Jaipur</div>
+					<small style="color:#10b981;">✓ Verified Passenger</small>
+				</div>
+
+				<div class="review-card">
+					<div style="color:#eab308; margin-bottom:8px;">★★★★★</div>
+					<p style="font-size:13px; color:#334155; line-height:1.6;">"Live GPS tracking showed the exact milestone on the expressway. My family could follow my bus in real time. Very clean Volvo AC coach."</p>
+					<div style="margin-top:12px; font-weight:700; font-size:12px; color:#0f172a;">— Vikram Singhania · Mumbai ➔ Pune</div>
+					<small style="color:#10b981;">✓ Verified Passenger</small>
+				</div>
+
+				<div class="review-card">
+					<div style="color:#eab308; margin-bottom:8px;">★★★★★</div>
+					<p style="font-size:13px; color:#334155; line-height:1.6;">"The 360° coach view allowed me to check the seat layout before booking. Smooth booking and clear digital ticket receipt with QR code."</p>
+					<div style="margin-top:12px; font-weight:700; font-size:12px; color:#0f172a;">— Sneha Rao · Bengaluru ➔ Chennai</div>
+					<small style="color:#10b981;">✓ Verified Passenger</small>
+				</div>
+			</div>
+		</section>
+
+		<!-- 10. FREQUENTLY ASKED QUESTIONS (FAQ) -->
+		<section class="faq-section" id="faqSection">
+			<div class="content-width">
+				<div class="section-heading" style="text-align:center;">
+					<div>
+						<span class="section-kicker">HAVE QUESTIONS?</span>
+						<h2>Frequently Asked Questions</h2>
+						<p>Everything you need to know about luggage allowances, live tracking, and bookings.</p>
+					</div>
+				</div>
+
+				<div class="faq-list">
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> How much luggage is allowed?</div>
+						<div class="faq-answer"><strong>15 KG of luggage is allowed completely free of charge per passenger.</strong> This covers both cabin bags and luggage placed in the lower undercarriage hold. Additional charges apply only if your luggage exceeds 15 KG.</div>
+					</div>
+
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> How is extra luggage charged?</div>
+						<div class="faq-answer">Luggage exceeding 15 KG is charged transparently at <strong>₹30 per extra KG</strong>. For example, if you carry 20 KG (5 KG excess), the extra charge is 5 × ₹30 = ₹150. You can calculate this anytime using our live Baggage Fare Calculator.</div>
+					</div>
+
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> How can I track my bus in real time?</div>
+						<div class="faq-answer">Click on <strong>"Track My Bus"</strong> or the Live Tracking section on our home page. You can follow active buses on our interactive GPS map, see current highway speed, remaining distance, and AI-predicted arrival times.</div>
+					</div>
+
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> Can I cancel or reschedule my ticket?</div>
+						<div class="faq-answer">Yes, bookings can be cancelled up to 4 hours prior to departure for an instant 90% refund directly credited to your original payment method.</div>
+					</div>
+
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> What happens if my bus is delayed by traffic?</div>
+						<div class="faq-answer">Our AI Delay Prediction system analyzes traffic congestion ahead and dispatches automated SMS notifications to passengers with updated ETAs and optimized bypass routes.</div>
+					</div>
+
+					<div class="faq-card">
+						<div class="faq-question"><i class="fa-solid fa-circle-question" style="color:#a91d32;"></i> How do I contact emergency support?</div>
+						<div class="faq-answer">Use the red <strong>Emergency SOS</strong> button located in the navigation header or call our 24/7 Central Control Room hotline at <strong>1800-AI-BUS</strong> (toll-free).</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 11. EMERGENCY / SAFETY CTA BANNER -->
+		<section class="bottom-cta" style="background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-top:1px solid #334155;">
+			<div class="content-width bottom-cta-inner">
+				<span class="cta-icon" style="background:#a91d32; color:#fff;">🚨</span>
+				<div>
+					<b style="color:#ffffff;">24/7 Fleet Safety & Emergency Control Desk</b>
+					<small style="color:#94a3b8;">Toll-free Hotline: 1800-AI-BUS (1800-242-87) · Direct Highway Police Link (112)</small>
+				</div>
+				<button type="button" class="btn-sos" onclick="alert('🚨 EMERGENCY PROTOCOL TRIGGERED\n\nCentral Security Dispatch notified.\nVehicle coordinates transmitted to National Highway Police.')" style="background:#dc2626; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:800; cursor:pointer;">EMERGENCY SOS</button>
+			</div>
+		</section>
+
+		<section class="popular-section content-width" id="routes"><div class="section-heading"><div><span class="section-kicker">A LITTLE INSPIRATION</span><h2>India is closer than you think</h2><p>Popular journeys to get your next trip moving.</p></div><a class="text-link" href="#home">Explore all routes <span>→</span></a></div><div class="destination-grid">
+			<button class="destination-card" data-route="Delhi|Jaipur" type="button"><img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=800&q=82" alt="Pink sandstone architecture in Jaipur" loading="lazy"><span class="destination-gradient"></span><span class="destination-copy"><small>ROYAL PINK CITY</small><b>Delhi <i>→</i> Jaipur</b><span>From ₹399 <span>·</span> 5 hrs</span></span><span class="destination-arrow">↗</span></button>
+			<button class="destination-card" data-route="Mumbai|Pune" type="button"><img src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=82" alt="Mumbai city skyline" loading="lazy"><span class="destination-gradient"></span><span class="destination-copy"><small>THE WESTERN EXPRESS</small><b>Mumbai <i>→</i> Pune</b><span>From ₹299 <span>·</span> 4 hrs</span></span><span class="destination-arrow">↗</span></button>
+			<button class="destination-card" data-route="Bengaluru|Chennai" type="button"><img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=82" alt="Chennai coastal city" loading="lazy"><span class="destination-gradient"></span><span class="destination-copy"><small>SOUTHERN DISCOVERY</small><b>Bengaluru <i>→</i> Chennai</b><span>From ₹549 <span>·</span> 6 hrs</span></span><span class="destination-arrow">↗</span></button>
+			<button class="destination-card" data-route="Hyderabad|Vijayawada" type="button"><img src="https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=82" alt="Historic Indian monument at sunset" loading="lazy"><span class="destination-gradient"></span><span class="destination-copy"><small>HERITAGE & HORIZONS</small><b>Hyderabad <i>→</i> Vijayawada</b><span>From ₹499 <span>·</span> 5 hrs</span></span><span class="destination-arrow">↗</span></button>
+		</div></section>
+
+		<section class="network-section" id="live"><div class="content-width network-content"><div><span class="section-kicker light-kicker">THE ROAD IS ALWAYS MOVING</span><h2>Every journey.<br><span>In the know.</span></h2><p>Follow your bus along its journey with an interactive map and real-time trip progress.</p><div class="network-stats"><div><b>50<span>+</span></b><small>Connected cities</small></div><div><b>1,500<span>+</span></b><small>Sample daily services</small></div><div><b>24<span>/7</span></b><small>Journey information</small></div></div><a class="light-cta" href="#home">Plan a journey <span>→</span></a></div><div class="network-visual"><img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1000&q=85" alt="Modern intercity coach on a highway" loading="lazy"><div class="visual-caption"><span class="pulse-point"></span><span><b>Journeys, made visible</b><small>Choose a route to preview the map</small></span><span class="caption-arrow">↗</span></div></div></div></section>
+
+		<section class="fare-section content-width" id="fares"><div class="fare-copy"><span class="section-kicker">GOOD TO KNOW BEFORE YOU GO</span><h2>Fair fares.<br>Clear choices.</h2><p>See an estimated fare range for your selected route and bus type before you book.</p><div class="fare-clarity"><span>✓</span> No hidden fees in this demo</div><button class="outline-button" id="fareButton" type="button">Check route fare <span>→</span></button></div><div class="fare-card"><div class="fare-card-top"><span class="fare-sparkle">✳</span><span>FARE GUIDE</span><span class="fare-card-line"></span></div><div class="fare-row"><span><i class="fare-dot ordinary"></i> Ordinary</span><b>from ₹299</b></div><div class="fare-row"><span><i class="fare-dot ac"></i> AC Seater</span><b>from ₹499</b></div><div class="fare-row"><span><i class="fare-dot sleeper"></i> AC Sleeper</span><b>from ₹799</b></div><div class="fare-row"><span><i class="fare-dot premium"></i> Volvo / Premium</span><b>from ₹999</b></div><small class="fare-disclaimer">Indicative fares only. Final prices vary by route, date and operator.</small></div></section>
+
+		<section class="bottom-cta"><div class="content-width bottom-cta-inner"><span class="cta-icon">↗</span><div><b>Your next story is out there.</b><small>Pick a destination. We'll help you get there.</small></div><a href="#home">Find your bus <span>→</span></a></div></section>
+	</main>
+
+	<footer class="site-footer"><div class="content-width footer-main"><a class="brand footer-brand" href="#home"><span class="brand-mark"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 8.5A3.5 3.5 0 0 1 11.5 5h13A3.5 3.5 0 0 1 28 8.5v17a3.5 3.5 0 0 1-3.5 3.5h-13A3.5 3.5 0 0 1 8 25.5z"/><path d="M11 10h14v9H11zM11 22h4m6 0h4M12 29l-2 3m14-3 2 3"/></svg></span><span class="brand-name">AI <span>Bus</span> Track<small>SMART JOURNEYS · INDIA</small></span></a><p>A bus discovery and tracking demo for journeys across India. Not affiliated with any government transport corporation.</p><div class="footer-links"><a href="#routes">Popular routes</a><a href="#fares">Fare guide</a><a href="#live">Live tracking</a><a href="smart.html">Smart desk</a><a href="kiosk.html">Kiosk mode</a><a href="admin.html">Fleet desk</a><button type="button" id="footerHelp">Contact support</button></div></div><div class="content-width footer-bottom"><span>© 2026 AI Bus Track Demo</span><span>Illustrative information only · Confirm journeys with your operator</span><span>Made for the love of the journey <b>♥</b></span></div></footer>
+
+	<div class="modal-backdrop" id="modalBackdrop" hidden><dialog class="booking-modal" id="bookingDialog" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="Close dialog" type="button">×</button><div id="modalContent"></div></dialog></div>
+	<output class="toast" id="toast" aria-live="polite"></output>
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+	<script src="auth-client.js"></script>
+	<script src="three.min.js"></script>
+	<script src="OrbitControls.js"></script>
+	<script src="volvo-3d-tracker.js"></script>
+	<script src="creative-features.js"></script>
+	<script src="Tracker.js"></script>
+	<!-- AI TRAVEL ASSISTANT FLOATING CHATBOT -->
+	<button type="button" class="ai-chat-bubble-btn" onclick="window.toggleAIChat()" aria-label="Open AI Travel Assistant">
+		<i class="fa-solid fa-robot"></i>
+		<span>AI Travel Assistant</span>
+	</button>
+
+	<!-- AI TRAVEL ASSISTANT CHATBOT MODAL -->
+	<div class="ai-chat-modal" id="aiChatModal" hidden>
+		<div class="ai-chat-header">
+			<div style="display:flex; align-items:center; gap:8px;">
+				<i class="fa-solid fa-robot" style="color:#38bdf8;"></i>
+				<div>
+					<b style="font-size:13px; font-family:'Manrope',sans-serif;">AI Travel Assistant</b>
+					<div style="font-size:10px; color:#10b981;">● Online · Instant Answers</div>
+				</div>
+			</div>
+			<button type="button" onclick="window.toggleAIChat()" style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">×</button>
+		</div>
+		<div class="ai-chat-messages" id="aiChatMessages">
+			<div class="chat-bubble bubble-bot">
+				👋 Hello! I am your AI Bus Track Assistant. Ask me about live bus locations, 15 KG free luggage rules, arrival ETAs, or route fares.
+			</div>
+		</div>
+		<div class="chat-chip-suggestions">
+			<button type="button" class="chat-chip" onclick="window.fillChatPrompt('Where is my bus?')">Where is my bus?</button>
+			<button type="button" class="chat-chip" onclick="window.fillChatPrompt('When will my bus arrive?')">When will my bus arrive?</button>
+			<button type="button" class="chat-chip" onclick="window.fillChatPrompt('How much luggage can I carry?')">How much luggage can I carry?</button>
+			<button type="button" class="chat-chip" onclick="window.fillChatPrompt('What is my extra luggage charge?')">What is my extra luggage charge?</button>
+			<button type="button" class="chat-chip" onclick="window.fillChatPrompt('Which bus is available from Lucknow to Delhi?')">Lucknow to Delhi bus</button>
+		</div>
+		<form class="ai-chat-input-row" onsubmit="event.preventDefault(); window.sendChatMessage();">
+			<input type="text" id="aiChatInput" placeholder="Ask about bus, luggage, ETA..." autocomplete="off">
+			<button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+		</form>
+	</div>
+
+	<!-- 5 KM URGENT PASSENGER GEOFENCE NOTIFICATION MODAL -->
+	<div class="geofence-modal-backdrop" id="modalGeofenceUrgent" hidden>
+		<div class="geofence-alert-dialog" role="alertdialog" aria-labelledby="urgentAlertTitle">
+			<div class="geofence-dialog-header">
+				<div class="geofence-siren-icon">
+					<i class="fa-solid fa-triangle-exclamation"></i>
+				</div>
+				<div>
+					<span style="font-size:11px; font-weight:800; letter-spacing:1px; color:#fca5a5; text-transform:uppercase;">URGENT GEOFENCE RADAR ALERT · 5 KM PROXIMITY</span>
+					<h2 id="urgentAlertTitle" style="margin:2px 0 0; font-size:18px; font-family:'Manrope',sans-serif; color:#ffffff;">आपकी बस 5 किमी दूर है — तुरंत स्टेशन पहुंचिए!</h2>
+				</div>
+			</div>
+
+			<div class="geofence-dialog-body">
+				<div class="geofence-hindi-notice">
+					<strong>⚠️ आवश्यक सूचना (Immediate Attention Required):</strong><br>
+					आपकी बस <strong>UP32 AB 1234 (Delhi ➔ Lucknow)</strong> आपके बोर्डिंग स्टॉप से <strong>मात्र 4.8 किलोमीटर दूर</strong> है! आप अभी तक ओरिजिन स्टॉप पर नहीं पहुंचे हैं। 
+					<div style="margin-top:8px; font-weight:800; color:#ffffff; font-size:15px;">
+						👉 कृपया जल्द से जल्द कश्मीरी गेट ISBT (बे 04) पहुंचिए, नहीं तो आपकी बस छूट जाएगी!
+					</div>
+				</div>
+
+				<div class="geofence-detail-grid">
+					<div>
+						<small>Bus Number / Service</small>
+						<b>UP32 AB 1234 · Volvo AC</b>
+					</div>
+					<div>
+						<small>Boarding Platform / Bay</small>
+						<b style="color:#facc15;">BAY 04 (Kashmere Gate ISBT)</b>
+					</div>
+					<div>
+						<small>Current Distance from Stop</small>
+						<b style="color:#ef4444;">4.8 KM (Approaching Fast)</b>
+					</div>
+					<div>
+						<small>Estimated Arrival Time</small>
+						<b style="color:#10b981;">08:35 PM (लगभग 7 मिनट शेष)</b>
+					</div>
+				</div>
+
+				<div class="geofence-dialog-actions">
+					<button type="button" class="outline-button" onclick="window.speakHindiGeofenceWarning()" style="padding:10px 16px; font-size:12px; color:#fff; border-color:#94a3b8;">
+						<i class="fa-solid fa-volume-high"></i> उद्घोषणा सुनें
+					</button>
+					<button type="button" class="btn-geofence-test" style="background:#10b981; border-color:#34d399;" onclick="window.markPassengerArrivedAtOriginStation()">
+						<i class="fa-solid fa-circle-check"></i> मैं स्टेशन पहुंच गया हूँ (I Have Reached)
+					</button>
+					<button type="button" class="outline-button" onclick="window.dismissGeofenceAlertModal()" style="padding:10px 16px; font-size:12px; color:#94a3b8; border-color:#475569;">
+						बंद करें (Dismiss)
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

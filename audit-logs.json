@@ -1,0 +1,54 @@
+[
+  {
+    "logId": "AUD-20261001-001",
+    "userId": "usr-superadmin",
+    "userRole": "SUPER_ADMIN",
+    "action": "SYSTEM_INITIALIZED",
+    "entityType": "SystemSetting",
+    "entityId": "SETTINGS-CORE",
+    "oldValue": null,
+    "newValue": { "luggageRatePerKg": 30, "freeLuggageAllowanceKg": 15, "foodActive": true },
+    "ipAddress": "127.0.0.1",
+    "timestamp": "2026-10-01T00:00:00.000Z",
+    "reason": "Production Smart Bus System Deployment"
+  },
+  {
+    "logId": "AUD-20261008-002",
+    "userId": "usr-admin-01",
+    "userRole": "ADMIN",
+    "action": "ADMIN_UPDATED_FOOD_PRICE",
+    "entityType": "Food",
+    "entityId": "food-001",
+    "oldValue": { "price": 75 },
+    "newValue": { "price": 80 },
+    "ipAddress": "192.168.1.104",
+    "timestamp": "2026-10-08T09:15:20.000Z",
+    "reason": "Annual supplier ingredient cost adjustment"
+  },
+  {
+    "logId": "AUD-20261008-003",
+    "userId": "usr-passenger-01",
+    "userRole": "PASSENGER",
+    "action": "PASSENGER_CREATED_BOOKING",
+    "entityType": "Booking",
+    "entityId": "AI9F2A18D3",
+    "oldValue": null,
+    "newValue": { "seats": ["A12"], "fare": 650, "luggageWeight": 20, "extraLuggageCharge": 50 },
+    "ipAddress": "103.21.124.89",
+    "timestamp": "2026-10-08T14:30:00.000Z",
+    "reason": "Online self-service reservation"
+  },
+  {
+    "logId": "AUD-20261008-004",
+    "userId": "usr-passenger-01",
+    "userRole": "PASSENGER",
+    "action": "PASSENGER_ORDERED_FOOD",
+    "entityType": "FoodOrder",
+    "entityId": "FOOD-2026-000123",
+    "oldValue": null,
+    "newValue": { "totalAmount": 180, "itemsCount": 3, "orderStatus": "CONFIRMED" },
+    "ipAddress": "103.21.124.89",
+    "timestamp": "2026-10-08T14:30:00.000Z",
+    "reason": "Optional in-bus meal booking"
+  }
+]

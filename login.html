@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a91d32">
+  <title>Admin Portal Login — AI Bus Track</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="Tracker.css">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="creative-features.css">
+  <link rel="stylesheet" href="volvo-3d-tracker.css">
+  <style>
+    .auth-captcha-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .captcha-code {
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 4px;
+      color: #0f172a;
+      user-select: none;
+    }
+    .auth-demo-roles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 14px 0;
+    }
+    .role-btn-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+    .role-btn-pill:hover {
+      background: #a91d32;
+      color: #ffffff;
+      border-color: #a91d32;
+    }
+    .pw-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .pw-wrap input {
+      width: 100%;
+      padding-right: 38px;
+    }
+    .pw-toggle {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <header class="site-header auth-header">
+    <a class="brand" href="Tracker.html">
+      <span class="brand-mark">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 8.5A3.5 3.5 0 0 1 11.5 5h13A3.5 3.5 0 0 1 28 8.5v17a3.5 3.5 0 0 1-3.5 3.5h-13A3.5 3.5 0 0 1 8 25.5z"/><path d="M11 10h14v9H11zM11 22h4m6 0h4M12 29l-2 3m14-3 2 3"/></svg>
+      </span>
+      <span class="brand-name">AI <span>Bus</span> Track<small>SMART & SECURE TRANSPORTATION</small></span>
+    </a>
+    <a class="auth-home-link" href="Tracker.html">← Public Travel Portal</a>
+  </header>
+
+  <main class="auth-shell">
+    <section class="auth-art">
+      <span class="section-kicker">ENTERPRISE ACCESS · 256-BIT ENCRYPTION</span>
+      <h1>Smart Transportation<br><span>Admin Portal.</span></h1>
+      <p>Secure operations management for intercity, school, and college fleets. Unified telemetry, driver safety scoring, and emergency dispatch.</p>
+      
+      <div class="auth-security-points">
+        <span>✓ Role-Based Access Control (7 Roles)</span>
+        <span>✓ Multi-Factor Authentication Ready</span>
+        <span>✓ Real-time Geofence & Delay Monitoring</span>
+      </div>
+
+      <!-- Continuous Moving 3D Volvo Coach on Login Screen -->
+      <div style="margin: 22px 0 16px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+        <div style="background: rgba(15,23,42,0.9); padding: 8px 14px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:#10b981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> LIVE FLEET RADAR</span>
+          <span style="color:#94a3b8; font-weight:600;"><i class="fa-solid fa-cube"></i> REAL 3D VOLVO COACH</span>
+        </div>
+        <div id="miniLoginCanvasWrap" style="height: 120px; width: 100%; position: relative; background: #020617; overflow: hidden;"></div>
+      </div>
+
+      <div style="margin-top:16px; padding:14px; background:rgba(255,255,255,0.06); border-radius:8px; border:1px solid rgba(255,255,255,0.12); font-size:12px; color:#cbd5e1;">
+        <i class="fa-solid fa-shield-halved" style="color:#ff6b81; margin-right:6px;"></i>
+        <strong>Security Notice:</strong> Authorized personnel only. All system activities, telemetry updates, and administrative actions are monitored and logged.
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div id="authFormPanel">
+        <div class="auth-heading">
+          <span class="section-kicker">ADMINISTRATIVE ACCESS</span>
+          <h2 id="authTitle">Sign in to Admin Portal</h2>
+          <p id="authDescription">Enter your administrator credentials to access fleet dispatch.</p>
+        </div>
+
+        <!-- 1-Click Role Fillers for Hackathon Evaluation -->
+        <div>
+          <small style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Quick Demo Login (RBAC):</small>
+          <div class="auth-demo-roles">
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('superadmin@aibus.in', 'super_admin')">Super Admin</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('admin@aibus.in', 'admin')">Admin</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('manager.lucknow@aibus.in', 'station_manager')">Station Manager</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('driver.rajesh@aibus.in', 'driver')">Driver Pilot</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('pantry@aibus.in', 'food_staff')">Food Staff</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('kiosk.terminal1@aibus.in', 'kiosk')">Kiosk</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('passenger@aibus.in', 'passenger')">Passenger</button>
+            <button type="button" class="role-btn-pill" onclick="quickFillRole('auditor@aibus.in', 'auditor')">Auditor</button>
+          </div>
+        </div>
+
+        <div class="auth-switch">
+          <button class="auth-switch-button active" id="loginTab" type="button">Admin Sign In</button>
+          <button class="auth-switch-button" id="registerTab" type="button">Passenger Account</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" class="auth-form">
+          <label>EMAIL / USERNAME
+            <input name="email" id="loginEmailInput" type="email" autocomplete="email" required placeholder="admin@aibus.in" value="admin@aibus.in">
+          </label>
+
+          <label>PASSWORD
+            <div class="pw-wrap">
+              <input name="password" id="loginPasswordInput" type="password" autocomplete="current-password" required placeholder="Enter password" value="Admin@AI2026!">
+              <button type="button" class="pw-toggle" onclick="togglePasswordVisibility('loginPasswordInput', this)" title="Show/Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </label>
+
+          <!-- CAPTCHA / BOT PROTECTION -->
+          <label>SECURITY CAPTCHA
+            <div class="auth-captcha-box">
+              <span class="captcha-code" id="captchaQuestion">7 + 4 = ?</span>
+              <input type="number" id="captchaAnswerInput" placeholder="Answer" style="width:90px; margin:0;" required>
+            </div>
+          </label>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin:6px 0 12px; font-size:12px;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0; text-transform:none;">
+              <input type="checkbox" name="remember" checked style="width:auto; height:auto; margin:0;">
+              Remember me
+            </label>
+            <a href="#" onclick="openForgotPassword(event)" style="color:var(--primary); font-weight:700; text-decoration:none;">Forgot Password?</a>
+          </div>
+
+          <button class="auth-submit" type="submit" id="loginSubmitBtn">
+            <span>Sign in to Admin Console</span> <span>→</span>
+          </button>
+        </form>
+
+        <!-- PASSENGER REGISTER FORM -->
+        <form id="registerForm" class="auth-form" hidden>
+          <label>FULL NAME
+            <input name="name" autocomplete="name" maxlength="80" required placeholder="Your full name">
+          </label>
+          <label>EMAIL ADDRESS
+            <input name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+          </label>
+          <label>PASSWORD
+            <input name="password" type="password" minlength="12" maxlength="72" required placeholder="At least 12 characters">
+          </label>
+          <button class="auth-submit" type="submit">Create passenger account →</button>
+        </form>
+
+        <output id="authMessage" class="auth-message" aria-live="polite"></output>
+        <p class="auth-privacy">Protected by rate-limiting & automated account lockout after 5 failed attempts.</p>
+      </div>
+
+      <div id="signedInPanel" class="signed-in-panel" hidden>
+        <span class="auth-success-icon">✓</span>
+        <span class="section-kicker">SESSION ACTIVE</span>
+        <h2 id="signedInName">Admin Session</h2>
+        <p id="signedInRole"></p>
+        <a class="auth-submit auth-destination" id="continueLink" href="admin.html">Launch Admin Console →</a>
+        <button class="auth-logout" id="logoutButton" type="button">Sign out</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="three.min.js"></script>
+  <script src="OrbitControls.js"></script>
+  <script src="volvo-3d-tracker.js"></script>
+  <script src="auth-client.js"></script>
+  <script src="login.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof window.initVolvoMiniLoginViewer === 'function') {
+        window.initVolvoMiniLoginViewer('miniLoginCanvasWrap');
+      }
+    });
+
+    let captchaNum1 = 5;
+    let captchaNum2 = 3;
+
+    function refreshCaptcha() {
+      captchaNum1 = Math.floor(Math.random() * 8) + 2;
+      captchaNum2 = Math.floor(Math.random() * 8) + 1;
+      document.getElementById('captchaQuestion').textContent = `${captchaNum1} + ${captchaNum2} = ?`;
+      document.getElementById('captchaAnswerInput').value = '';
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      btn.innerHTML = isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+    }
+
+    function quickFillRole(email, role) {
+      document.getElementById('loginEmailInput').value = email;
+      document.getElementById('loginPasswordInput').value = 'Admin@AI2026!';
+      document.getElementById('captchaAnswerInput').value = (captchaNum1 + captchaNum2);
+      document.getElementById('authMessage').textContent = `Filled ${role.toUpperCase()} credentials. Click 'Sign in to Admin Console'.`;
+      document.getElementById('authMessage').className = 'auth-message success';
+    }
+
+    function openForgotPassword(e) {
+      e.preventDefault();
+      alert("Password Reset Protocol: In this enterprise deployment, please contact the Super Admin (admin@aibus.in) or use your registered corporate 2FA token.");
+    }
+
+    refreshCaptcha();
+  </script>
+</body>
+</html>
